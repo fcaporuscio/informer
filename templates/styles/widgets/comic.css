@@ -1,0 +1,101 @@
+/* Styles for Comics */
+
+.comic {
+  .widget-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .img-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 4px;
+    width: calc(100% - 8px);
+    padding: 4px;
+
+    .image {
+      max-width: 100%;
+      height: auto;
+    }
+
+    & + .close-button {
+      display: none;
+      justify-content: flex-end;
+      width: 100%;
+      margin-top: .5rem;
+
+      button {
+        background-color: {{ theme.accent_color }};
+        color: #fff;
+        border: 1px solid {{ theme.widget_border_color }};
+        border-radius: 4px;
+        padding: .5rem;
+      }
+    }
+
+    &.hidden {
+      display: inline-block;
+      visibility: hidden;
+    }
+
+    &.full {
+      justify-content: flex-start;
+      z-index: 100;
+      max-width: 100%;
+      overflow-x: auto;
+
+      & + .close-button {
+        display: flex;
+      }
+
+      .image {
+        max-width: 620px;
+      }
+    }
+  }
+
+  .date {
+    margin-bottom: .5rem;
+    align-self: flex-start;
+
+    &::before {
+      content: "Date";
+      margin-right: .5rem;
+      font-weight: bold;
+      color: {{ theme.accent_color }};
+    }
+
+    & + .loader {
+      display: none;
+    }
+
+    &:empty {
+      content: "Loading...";
+
+      & + .loader {
+        display: inline-block;
+      }
+    }
+  }
+  
+  /* Special Styles for Specific Comics */
+  &.widget-garfield {
+    .date {
+      &::before {
+        content: "Garfield";
+      }
+    }
+  }
+
+  &.widget-xkcd {
+    .date {
+      &::before {
+        content: "xkcd";
+      }
+    }
+  }
+}

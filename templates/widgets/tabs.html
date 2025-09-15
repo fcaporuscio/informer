@@ -1,0 +1,16 @@
+<div class="tab-link-container">
+    <div class="tab-list" role="tablist">
+        {% for tab in params.tabs %}{% if tab.name and tab.widgets %}{#
+            #}<a href="#/{{ tab.name|page_name }}" class="tab-link {% if loop.index == 1 %}tab-active{% else %}tab-inactive{% endif %}" onclick="informer.tabs.selectTab(this, '{{ tab_group_id }}-{{ loop.index }}')">
+                <span class="tab-name">{{ tab.name }}</span>
+            </a>{#
+        #}{% endif %}{% endfor %}
+    </div>
+</div>
+{% for tab in params.tabs %}{% if tab.name and tab.widgets %}
+    <div id="{{ tab_group_id }}-{{ loop.index }}" class="tab-container widget-box {% if loop.index == 1 %}tab-content-visible{% else %}tab-content-hidden{% endif %}">
+        {% for widget in tab.widgets %}{% if widget._widget %}
+            {{ widget._widget.html }}
+        {% endif %}{% endfor %}
+    </div>
+{% endif %}{% endfor %}

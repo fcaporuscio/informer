@@ -1,0 +1,5 @@
+{% if params.name %}<div class="strong">{{ params.name }}</div>{% endif %}
+<div class="widget-box">
+    <div class="{% if params.text_classes %}{{ params.text_classes }}{% endif %}">{{ params.text }}</div>
+    {% if params.subtext %}<div  class="fs-small-3 tar {% if params.subtext_classes %}{{ params.subtext_classes }}{% endif %}">{{ params.subtext }}</div>{% endif %}
+</div>

@@ -1,0 +1,26 @@
+<div class="rss-container{% if not shown %} show-on-full{% endif %}">
+    {% if img_url %}
+        <div class="img-container">
+            {% if link %}<a href="{{ link }}" target="_blank" tabindex="-1">{% endif %}
+            <img src="{{ img_url }}" class="{% if params.imagesmall %}img-small{% endif %}" />
+            {% if link %}</a>{% endif %}
+        </div>
+    {% endif %}
+    <div class="data-container">
+        <div class="title">
+            {% if link %}<a href="{{ link }}" target="_blank">{{ title }}</a>{% else %}{{ title }}{% endif %}
+        </div>
+        {% if elapsed %}
+            <div class="pub-date fs-small-3">
+                <div class="info-line">
+                    <span class="elapsed">{{ elapsed }}</span>
+                    {% if views %}<span class="views">{{ views }} views</span>{% endif %}
+                    {% if tags %}
+                        {% for tag in tags %}&bull; <span class="tag">{{ tag }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

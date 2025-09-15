@@ -1,0 +1,9 @@
+# Core requirements
+feedparser
+jinja2
+pendulum
+PyYAML
+Flask
+Flask-Cors
+requests
+requests-cache

@@ -1,0 +1,145 @@
+.widget-tabs {
+  .tab-link-container {
+    padding: 0 .5rem;
+
+    .tab-list {
+      overflow-x: auto;
+      scrollbar-width: thin;
+      text-wrap: nowrap;
+
+      &:focus-visible {
+        outline: none;
+      }
+    }
+  }
+
+  .tab-container {
+    &.tab-content-hidden {
+      display: none;
+    }
+    
+    .tab-container.widget-box {
+      padding: 0;
+    }
+
+    &.widget-box {
+      .tab-container.widget-box {
+        border: 0;
+      }
+    }
+  }
+}
+
+
+#page {
+  .widget {
+    /* Embedded Tabs */
+    .widget-tabs {
+      .tab-link-container {
+        padding-left: 0;
+        padding-right: 0;
+
+        .tab-list {
+          margin: -.5rem 0 1rem -.5rem;
+        }
+      }
+    }
+  }
+
+  a.tab-link {
+    display: inline-block;
+    font-weight: 300;
+    margin: 0;
+    padding: .5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    &:link, &:visited {
+      color: {{ theme.section_color }};
+      background-color: transparent;
+
+      &:focus-visible {
+        &::before {
+          display: none;
+        }
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        .tab-name {
+          border-bottom: 1px dotted {{ theme.accent_color }};
+        }
+      }
+
+      &.tab-active {
+        color: {{ theme.section_active_color }};
+        background-color: transparent;
+
+        .tab-name {
+          border-bottom: 1px dotted {{ theme.accent_color }};
+        }
+      }
+
+      & + a {
+      }
+    }
+
+    &:hover {
+      color: {{ theme.section_hover_color }};
+      background-color: transparent;
+    }
+  }
+}
+
+
+@media only print {
+  #page {
+    .widget-tabs {
+      a.tab-link {
+        display: none;
+
+        &:link, &:visited {
+          color: {{ theme.section_color }};
+          background-color: transparent;
+
+          &:focus-visible {
+            outline: 0;
+            border-radius: 0;
+          }
+
+          &.tab-active {
+            display: inline-block;
+            border-bottom: 0;
+
+            .tab-name {
+              border: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@supports not selector(:focus-visible) {
+  #page {
+    a.tab-link {
+      &:link, &:visited {
+        color: {{ theme.section_color }};
+        background-color: transparent;
+
+        &:focus {
+          color: {{ theme.section_active_color|hex_color_alpha(127) }};
+          outline: 1px solid {{ theme.accent_color|hex_color_alpha(64) }};
+          outline-offset: -1px;
+          border-radius: 8px;
+          .tab-name {
+            border-bottom: 1px dotted {{ theme.accent_color|hex_color_alpha(127) }};
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=VT323&display=swap">
+        <link rel="stylesheet" href="/styles.css?h={{ version }}-{{ informerccs_hash }}">
+        <link rel="stylesheet" href="/bundle_{% for filename in style_files|sorted() %}{% if loop.index > 1%},{% endif %}{{ filename }}{% endfor %}.css?h={{ version }}-{{ css_hash }}">
+
+        <script type="text/javascript" src="/static/informer.js?h={{ version }}-{{ informerjs_hash }}"></script>
+        <script type="text/javascript" src="/bundle_{% for filename in script_files|sorted() %}{% if loop.index > 1%},{% endif %}{{ filename }}{% endfor %}.js?h={{ version }}-{{ js_hash }}" defer></script>
+        <script type="text/javascript" src="/static/chartjs/chart.js?v=4.5.0" defer></script>
+        <script type="text/javascript" src="/static/chartjs/luxon.min.js?v=3.4.4" defer></script>
+        <script type="text/javascript" src="/static/chartjs/chart_luxon_adapter.js?v=1.3.1" defer></script>
+
+        <script type="text/javascript">
+            document.addEventListener('onInformerReady', (event) => {
+                let widgetParams = {
+                    {% for widget in widgets %}{% if widget._widget %}{% if loop.index > 1 %},
+                    {% endif %}"{{ widget._widget.uniqueclass }}": {{ widget._widget.params.configArgs }}{% endif %}{% endfor %}
+                };
+
+                event.detail.informer.setWidgetParams(widgetParams);
+                event.detail.informer.setTheme({
+                    {% for k, v in theme.items() %}{% if loop.index > 1 %},
+                    {% endif %}{{ k }}: "{{ v }}"{% endfor %}
+                });
+            });
+        </script>
+    </head>
+    <body id="app">
+        <div id="navbar">
+            {% for page in pages %}
+                <a href="{{ page.slug }}" class="nav-link{% if page.slug == config.slug %} active{% endif %}"{% if page.slug == config.slug %} onclick="return false;" tabindex="-1"{% endif %}>
+                    <span class="nav-name">{{ page.name }}</span>
+                </a>
+            {% endfor %}
+        </div>
+        <div id="page">
+            {% for col in config.columns %}
+                <div class="column column-{{ col.size|default('wide', true) }}">
+                    {% for widget in col.widgets %}
+                        {% if widget._widget %}
+                            {{ widget._widget.html }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+<div class="widget-header">Clock</div>
+<div class="widget-box">
+    <div class="dt-container flex flex-r">
+        <div class="date fg-highlight fs-large-1 text-no-wrap">--</div>
+        {% if params.time %}<div class="time fg-highlight fs-large-1">--</div>{% endif %}
+    </div>
+    {% if params.name or params.showtz %}
+        <div class="dt-container flex flex-r fs-small-3">
+            {% if params.name %}<div class="name">{{ params.name }}</div>{% endif %}
+            {% if params.showtz %}<div class="tz tar">{{ params.timezone }}</div>{% endif %}
+        </div>
+    {% endif %}
+</div>

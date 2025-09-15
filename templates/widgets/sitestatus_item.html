@@ -1,0 +1,13 @@
+<div class="site-row status-{% if ok %}success{% else %}failure{% endif %}">
+    <div class="url">
+        {% if name %}
+            <div class="name">{{ name }}</div>
+            <div class="domain">{{ domain }}</div>{#
+            #}{% if uri %}<div class="uri hide-empty">{{ uri }}</div>{% endif %}{#
+            #}{% if elapsed %}<div class="elapsed hide-empty">{{ elapsed }}</div>{% endif %}
+        {% else %}
+            <div class="name">{{ url }}</div>
+        {% endif %}
+    </div>
+    <div class="status">{# {{ status_code }} #}{% if ok %}OK{% else %}ISSUE{% endif %}</div>
+</div>

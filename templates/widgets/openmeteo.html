@@ -1,0 +1,14 @@
+<div class="widget-header">Weather{% if params.name %} - <span class="widget-subheader">{{ params.name }}</span>{% endif %}</div>
+<div class="widget-box">
+    <div class="current flex flex-r">
+        <div class="current-temperature fg-highlight fs-large-1"></div>
+        <div class="relhum fg-highlight fs-large-1"></div>
+    </div>
+    {% if params.graph %}
+        <div class="tac">
+            <div class="openmeteo-chart-container">
+                <canvas id="{{ chart_id }}" class="loader"></canvas>
+            </div>
+        </div>
+    {% endif %}
+</div>
