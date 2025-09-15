@@ -1,16 +1,15 @@
 # Informer
 
-Stay informed with whatever interests you. It is written in Python and
-uses Flask and Jinja2 at the core.
+Stay informed with whatever interests you. It is written in Python (3.11)
+and uses Flask and Jinja2 at the core.
 
-This starts a web server that will server pages customized via a YAML
+This starts a web server that will serve pages customized via a YAML
 configuration file.
 
-This project is in the early stages and currently has very simple widgets
-to demonstrate how it all comes together. It would be great to see widget
-contributions! I think this is a great project for beginners as it isn't
-very complicated and you can get a new widget up and running rather
-quickly.
+This project currently has very simple widgets to demonstrate how it all
+comes together. It would be great to see widget contributions! I think this
+is a great project for anyone as it isn't very complicated and you can get
+new widgets up and running.
 
 ---
 
