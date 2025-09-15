@@ -11,10 +11,6 @@ window.addEventListener('load', (event) => {
     }
 
     receiveData(data) {
-      if(data.error) {
-        informer.setWidgetError(this, data.error);
-        return;
-      }
       const units = data.units;
 
       // Current

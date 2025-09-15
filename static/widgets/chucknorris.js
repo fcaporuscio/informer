@@ -10,11 +10,6 @@ window.addEventListener('load', (event) => {
     }
 
     receiveData(data) {
-      if(data.error || !data?.value) {
-        informer.setWidgetError(this, data.error);
-        return;
-      }
-
       this.quote.innerText = data.value;
 
       if(this.icon != null) {

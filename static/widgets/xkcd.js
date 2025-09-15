@@ -22,11 +22,6 @@ window.addEventListener('load', (event) => {
     }
 
     receiveData(data) {
-      if(data.error) {
-        informer.setWidgetError(this, data.error);
-        return;
-      }
-
       if(data?.img) {
         this.image.src = data.img;
         informer.removeClass(this.image_container, "hidden");

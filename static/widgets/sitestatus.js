@@ -9,11 +9,6 @@ window.addEventListener('load', (event) => {
     }
 
     receiveData(data) {
-      if(data.error) {
-        informer.setWidgetError(this, data.error);
-        return;
-      }
-      
       this.content.innerHTML = data.html;
       informer.removeClass(this.content, "loader");
     }

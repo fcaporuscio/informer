@@ -9,11 +9,6 @@ window.addEventListener('load', (event) => {
     }
 
     receiveData(data) {
-      if(data.error || !data?.quotes?.length) {
-        informer.setWidgetError(this, data.error);
-        return;
-      }
-
       const quotes = data.quotes;
       const randomIdx = (Date.now() % 10) % quotes.length;
 

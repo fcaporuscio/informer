@@ -16,11 +16,6 @@ window.addEventListener('load', (event) => {
     }
 
     receiveData(data) {
-      if(data.error) {
-        informer.setWidgetError(this, data.error);
-        return;
-      }
-
       if(data.name) {
         this.rss_name.innerText = data.name;
         informer.removeClass(this.rss_name, "hidden");
