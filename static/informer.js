@@ -400,6 +400,13 @@ window.addEventListener('load', (event) => {
     }
   }
 
+  // Make sure the active 'page' link is in view.
+  const page_link = document.querySelector("#navbar a.nav-link.active");
+  if(page_link && page_link?.scrollIntoView) {
+    page_link.scrollIntoView();
+    window.scrollTo(0, 0);
+  }
+
   // Create our informer object and notify anyone who is listening!
   // (our Page should be listening for this event so that it can
   // send all the widget params over to the informer object).
