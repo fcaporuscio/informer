@@ -33,6 +33,12 @@ new widgets up and running.
 - [numpy](https://pypi.org/project/numpy/)
 - [pandas](https://pypi.org/project/pandas/)
 
+
+The open-meteo requirements are kept separate because the dependencies
+are large. Unless you intend to use the open-meteo widget, there is no
+need to install these.
+
+
 ---
 
 ## Tree Structure
@@ -296,7 +302,6 @@ theme:
   - page_background_color: black
   - accent_color: "#2e8ed8"
   - section_color: goldenrod
-  - section_visited_color: green
   - section_hover_color: gold
   - section_active_color: gold
   - link_visited_foreground_color: gray

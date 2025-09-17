@@ -402,6 +402,10 @@ window.addEventListener('load', (event) => {
 
   // Make sure the active 'page' link is in view.
   const page_link = document.querySelector("#navbar a.nav-link.active");
+  const page_link_next = document.querySelector("#navbar a.nav-link.active + a.nav-link");
+  if(page_link_next && page_link_next?.scrollIntoView) {
+    page_link_next.scrollIntoView();
+  }
   if(page_link && page_link?.scrollIntoView) {
     page_link.scrollIntoView();
     window.scrollTo(0, 0);

@@ -39,7 +39,7 @@
     }
 
     .name {
-      color: {{ theme.section_active_color }};
+      color: {{ theme.section_color }};
     }
 
     .url {
@@ -51,6 +51,7 @@
       margin-right: .25rem;
       font-size: .70rem;
       display: inline-block;
+      color: {{ theme.section_active_color|hex_color_alpha(200) }};
     }
 
     .uri, .elapsed {

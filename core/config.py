@@ -110,7 +110,6 @@ class Config:
 
       # Sections (headers, tabs, etc.)
       "section_color"                      : "gray",
-      "section_visited_color"              : "gray",
       "section_hover_color"                : "lightgray",
       "section_active_color"               : "white",
 

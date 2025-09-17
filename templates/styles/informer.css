@@ -103,6 +103,10 @@ html, body {
     color: {{ theme.link_active_foreground_color }};
   }
 
+  .fg-section {
+    color: {{ theme.section_active_color }};
+  }
+
   .text-no-wrap {
     text-wrap: nowrap;
   }
@@ -116,11 +120,11 @@ html, body {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  max-height: 2.6rem;
   overflow-x: scroll;
   overflow-y: hidden;
   scrollbar-width: thin;
   text-wrap: nowrap;
+  padding: 0 .5rem;
 
   a.nav-link {
     display: inline-block;
@@ -129,14 +133,6 @@ html, body {
     padding: .5rem;
     text-decoration: none;
     line-height: 1.6;
-
-    &:first-child {
-      padding-left: 0;
-    }
-
-    &:last-child {
-      padding-right: 0;
-    }
 
     .nav-name {
       display: inline-block;
@@ -148,7 +144,13 @@ html, body {
       background-color: transparent;
 
       & + a {
-        margin-left: .125rem;
+        /*margin-left: .125rem;*/
+        padding-left: 0;
+
+        &::before {
+          content: "/";
+          color: {{ theme.accent_color|hex_color_alpha(60) }};
+        }
       }
 
       &:focus-visible {
@@ -591,13 +593,16 @@ html, body {
 */
 
 @media screen and (min-resolution: 2dppx) {
-  #app {
-    font-size: 16px;
-  }
-}
-
-@media screen and (min-resolution: 4dppx) {
-  #app {
+  #app, body, html {
     font-size: 18px;
+  }
+
+  #navbar {
+    a.nav-link {
+      &:link, &:visited {
+        padding-top: 1rem;
+        padding-bottom: 1.5rem;
+      }
+    }
   }
 }
