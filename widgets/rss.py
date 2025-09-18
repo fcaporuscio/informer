@@ -19,12 +19,12 @@ class RSS(Widget):
 
   ARGUMENTS = Widget.MAKE_ARGUMENTS(
     [
-      ("url",         str),
-      ("limit",       int,  10),
-      ("show",        int,  3),
-      ("images",     bool,  False),
-      ("imagesmall", bool,  False),
-      ("showname",   bool,  True),
+      ("url",         (str, list)),
+      ("limit",       int,          10),
+      ("show",        int,          3),
+      ("images",     bool,          False),
+      ("imagesmall", bool,          False),
+      ("showname",   bool,          True),
     ],
     cache="1h"
   )
@@ -47,13 +47,6 @@ class RSS(Widget):
     if limit is not None and limit <= 0:
       raise WidgetInitException(f"Invalid argument: limit={limit} (must be greater than 0).")
 
-  # def get_cache_key(self):
-  #   """Return the key to be used for the internal cache. Using the
-  #   internal ensures that we don't keep parsing the response. The RSS
-  #   feeds have multiple components so we cache the final 'crunched'
-  #   data."""
-  #   return self.params["url"]
-
   def fetch_data(self):
     """Fetch and parse the RSS feed."""
 
@@ -61,112 +54,128 @@ class RSS(Widget):
     results = self._fetch_data(url)
     return results
 
-  def _fetch_data(self, url: str):
+  def _fetch_data(self, url: str | list):
     """Fetch and parse the page, returning the final results."""
 
-    # Fetch the raw feed data
-    headers = { "User-Agent": self.user_agent }
-    response = self.web_fetch("GET", url, headers=headers, timeout=2)
-    if not response.ok:
-      raise WidgetFetchDataException(f"Failed to fetch the feed: {url}")
+    if isinstance(url, str):
+      url = [url]
 
-    # Parse the feed
-    feed = feedparser.parse(response.text)
+    urls = url
+    contexts = []
 
-    date_formats = [
-      "%a, %d %b %Y %H:%M:%S %Z",
-      "%a, %d %b %Y %H:%M:%S %z",
-      "%Y-%m-%dT%H:%M:%S%z",
-    ]
+    for url in urls:
+      # Fetch the raw feed data
+      headers = { "User-Agent": self.user_agent }
+      response = self.web_fetch("GET", url, headers=headers, timeout=2)
+      if not response.ok:
+        raise WidgetFetchDataException(f"Failed to fetch the feed: {url}")
 
-    show = self.params["show"]
-    limit = self.params["limit"]
-    
-    content_template = "widgets/rss_item.html"
-    template = loader_env.get_template(content_template)
-    rss_items_html = ""
+      # Parse the feed
+      feed = feedparser.parse(response.text)
 
-    # Loop through each entru
-    for idx, item in enumerate(feed.entries[:limit]):
-      if hasattr(item, "link"):
-        link = item.link
-      else:
-        link = None
+      date_formats = [
+        "%a, %d %b %Y %H:%M:%S %Z",
+        "%a, %d %b %Y %H:%M:%S %z",
+        "%Y-%m-%dT%H:%M:%S%z",
+      ]
+
+      show = self.params["show"]
+      limit = self.params["limit"]
       
-      if hasattr(item, "title"):
-        title = item.title
-      else:
-        title = "NO TITLE"
+      content_template = "widgets/rss_item.html"
+      template = loader_env.get_template(content_template)
+      rss_items_html = ""
 
-      tags = set()
-      if hasattr(item, "tags"):
-        for tag in item.tags:
-          if not isinstance(tag, dict):
-            continue
-          term = tag.get("term")
-          if term:
-            term = [ t.strip() for t in term.split("/") ]
-            for t in term:
-              tags.add(t.title())
 
-      item_views = None
-      media_statistics = item.get("media_statistics")
-      if isinstance(media_statistics, dict):
-        if "views" in media_statistics:
-          item_views = self.short_value(media_statistics.get("views"))
+      # Loop through each entru
+      for idx, item in enumerate(feed.entries[:limit]):
+        if hasattr(item, "link"):
+          link = item.link
+        else:
+          link = None
+        
+        if hasattr(item, "title"):
+          title = item.title
+        else:
+          title = "NO TITLE"
 
-      if self.params["images"]:
-        thumbnail_url = None
-        media_content = item.get("media_content")
-        media_thumbnail = item.get("media_thumbnail")
+        tags = set()
+        if hasattr(item, "tags"):
+          for tag in item.tags:
+            if not isinstance(tag, dict):
+              continue
+            term = tag.get("term")
+            if term:
+              term = [ t.strip() for t in term.split("/") ]
+              for t in term:
+                tags.add(t.title())
 
-        if media_thumbnail:
-          img_url = media_thumbnail[0]["url"]
-        elif media_content:
-          img_url = media_content[0]["url"]
+        item_views = None
+        media_statistics = item.get("media_statistics")
+        if isinstance(media_statistics, dict):
+          if "views" in media_statistics:
+            item_views = self.short_value(media_statistics.get("views"))
+
+        if self.params["images"]:
+          thumbnail_url = None
+          media_content = item.get("media_content")
+          media_thumbnail = item.get("media_thumbnail")
+
+          if media_thumbnail:
+            img_url = media_thumbnail[0]["url"]
+          elif media_content:
+            img_url = media_content[0]["url"]
+          else:
+            img_url = None
+
+          if img_url is not None:
+            # Don't include formats we don't validate (like .mov, for instance)
+            valid_ext = ["jpg", "jpeg", "gif", "png", "svg"]
+            if not any([ (img_url.split("?")[0]).endswith("." + ext) for ext in valid_ext ]):
+              img_url = None
         else:
           img_url = None
 
-        if img_url is not None:
-          # Don't include formats we don't validate (like .mov, for instance)
-          valid_ext = ["jpg", "jpeg", "gif", "png", "svg"]
-          if not any([ (img_url.split("?")[0]).endswith("." + ext) for ext in valid_ext ]):
-            img_url = None
-      else:
-        img_url = None
+        if hasattr(item, "published"):
+          pub_date = item.published
+        else:
+          pub_date = None
 
-      if hasattr(item, "published"):
-        pub_date = item.published
-      else:
-        pub_date = None
+        pub_dt = None
 
-      pub_dt = None
+        if pub_date is not None:
+          for date_format in date_formats:
+            try:
+              pub_dt = datetime.datetime.strptime(pub_date, date_format)
+              pub_dt = pendulum.instance(pub_dt)
+              break
+            except Exception as e:
+              pass
 
-      if pub_date is not None:
-        for date_format in date_formats:
-          try:
-            pub_dt = datetime.datetime.strptime(pub_date, date_format)
-            pub_dt = pendulum.instance(pub_dt)
-            break
-          except Exception as e:
-            pass
+        is_visible = show > idx if show is not None else True
 
-      is_visible = show > idx if show is not None else True
+        context = {
+          "params": self.params,
+          "widgetclass": self.widgetclass,
+          "self": self,
+          "title": title,
+          "link": link,
+          "img_url": img_url,
+          "pub_date": pub_dt.format("YYYY-MM-DD h:mmA").lower() if pub_dt is not None else None,
+          "pub_ts": pub_dt.int_timestamp if pub_dt is not None else 0,
+          "elapsed": self.elapsed_since(pub_dt),
+          "tags": sorted(tags),
+          "shown": is_visible,
+          "views": item_views,
+          "feed_title": feed.feed.title if len(urls) > 1 and hasattr(feed.feed, "title") else None,
+        }
 
-      context = {
-        "params": self.params,
-        "widgetclass": self.widgetclass,
-        "self": self,
-        "title": title,
-        "link": link,
-        "img_url": img_url,
-        "pub_date": pub_dt.format("YYYY-MM-DD h:mmA").lower() if pub_dt is not None else None,
-        "elapsed": self.elapsed_since(pub_dt),
-        "tags": sorted(tags),
-        "shown": is_visible,
-        "views": item_views,
-      }
+        contexts.append(context)
 
+    # Sort all item contexts
+    contexts = sorted(contexts, key=lambda c: c["pub_ts"], reverse=True)
+
+    for context in contexts:
       html_fragment = template.render(context)
       rss_items_html += html_fragment
 

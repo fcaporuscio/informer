@@ -85,6 +85,8 @@ def main():
 
       if isinstance(validator, type):
         validator_str = validator.__name__
+      elif isinstance(validator, (list, tuple)) and all([ isinstance(v, type) for v in validator ]):
+        validator_str = "|".join([ _validator.__name__ for _validator in validator ])
       elif callable(validator):
         validator_str = f"{validator.__name__}() function"
       else:

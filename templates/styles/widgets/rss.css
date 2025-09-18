@@ -23,6 +23,9 @@
 
     .elapsed {
       color: {{ theme.widget_foreground_color }};
+    }
+
+    .feed-title, .elapsed {
       font-weight: 700;
     }
 
