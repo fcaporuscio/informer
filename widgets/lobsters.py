@@ -10,8 +10,10 @@ __all__ = ["Lobsters"]
 class Lobsters(RSS):
   """Fetches the Lobsters tag feed (RSS)."""
 
+  STR_LIST = (str, list)
+
   ARGUMENTS = RSS.MAKE_ARGUMENTS(
-    [("tag", str)],
+    [("tag", STR_LIST)],
     ignore=["url"]
   )
 
@@ -24,7 +26,8 @@ class Lobsters(RSS):
     if not tag:
       raise WidgetInitException("Missing 'tag' parameter. It is required.'")
 
-    self.params["url"] = f"https://lobste.rs/t/{tag}.rss"
+    tags = tag if isinstance(tag, list) else [tag]
+    self.params["url"] = [ f"https://lobste.rs/t/{tag}.rss" for tag in tags ]
 
     limit = self.params["limit"]
     if limit is not None and limit <= 0:

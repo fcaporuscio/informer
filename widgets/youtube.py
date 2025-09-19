@@ -10,8 +10,10 @@ __all__ = ["YouTube"]
 class YouTube(RSS):
   """Fetches the YouTube channel feed (RSS)."""
 
+  STR_LIST = (str, list)
+
   ARGUMENTS = RSS.MAKE_ARGUMENTS(
-    [("channel_id", str)],
+    [("channel_id", STR_LIST)],
     ignore=["url"]
   )
 
@@ -25,7 +27,8 @@ class YouTube(RSS):
     if not channel_id:
       raise WidgetInitException("Missing 'channel_id' parameter. It is required.'")
 
-    self.params["url"] = f"{self.YOUTUBE_FEED_URL}?channel_id={channel_id}"
+    channel_ids = channel_id if isinstance(channel_id, list) else [channel_id]
+    self.params["url"] = [ f"{self.YOUTUBE_FEED_URL}?channel_id={channel_id}" for channel_id in channel_ids ]
 
     limit = self.params["limit"]
     if limit is not None and limit <= 0:

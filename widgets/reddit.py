@@ -10,8 +10,10 @@ __all__ = ["Reddit"]
 class Reddit(RSS):
   """Fetches the Subreddit feed (RSS)."""
 
+  STR_LIST = (str, list)
+
   ARGUMENTS = RSS.MAKE_ARGUMENTS(
-    [("subreddit", str)],
+    [("subreddit", STR_LIST)],
     ignore=["url"]
   )
 
@@ -24,7 +26,8 @@ class Reddit(RSS):
     if not subreddit:
       raise WidgetInitException("Missing 'subreddit' parameter. It is required.'")
 
-    self.params["url"] = f"https://www.reddit.com/r/{subreddit}.rss"
+    subreddits = subreddit if isinstance(subreddit, list) else [subreddit]
+    self.params["url"] = [ f"https://www.reddit.com/r/{subreddit}.rss" for subreddit in subreddits ]
 
     limit = self.params["limit"]
     if limit is not None and limit <= 0:

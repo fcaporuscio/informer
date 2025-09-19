@@ -17,14 +17,16 @@ __all__ = ["RSS"]
 class RSS(Widget):
   """Fetch and parse feed data."""
 
+  STR_LIST = (str, list)
+
   ARGUMENTS = Widget.MAKE_ARGUMENTS(
     [
-      ("url",         (str, list)),
-      ("limit",       int,          10),
-      ("show",        int,          3),
-      ("images",     bool,          False),
-      ("imagesmall", bool,          False),
-      ("showname",   bool,          True),
+      ("url",         STR_LIST),
+      ("limit",       int,       10),
+      ("show",        int,       3),
+      ("images",     bool,       False),
+      ("imagesmall", bool,       False),
+      ("showname",   bool,       True),
     ],
     cache="1h"
   )
@@ -62,13 +64,34 @@ class RSS(Widget):
 
     urls = url
     contexts = []
+    url_errors = {}
+    titles = set()
+      
+    show = self.params["show"]
+    limit = self.params["limit"]
+
+    headers = {
+      "User-Agent": self.user_agent,
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+      "Accept-Encoding": "gzip, deflate",
+      "Connection": "keep-alive",
+      "Upgrade-Insecure-Requests": "1",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none",
+      "Sec-Fetch-User": "?1",
+      "Cache-Control": "max-age=0",
+    }
 
     for url in urls:
       # Fetch the raw feed data
-      headers = { "User-Agent": self.user_agent }
-      response = self.web_fetch("GET", url, headers=headers, timeout=2)
-      if not response.ok:
-        raise WidgetFetchDataException(f"Failed to fetch the feed: {url}")
+      try:
+        response = self.web_fetch("GET", url, headers=headers, timeout=2)
+        if not response.ok:
+          raise WidgetFetchDataException(f"Failed to fetch the feed: {url}")
+      except Exception as e:
+        url_errors[url] = e
+        continue
 
       # Parse the feed
       feed = feedparser.parse(response.text)
@@ -79,16 +102,15 @@ class RSS(Widget):
         "%Y-%m-%dT%H:%M:%S%z",
       ]
 
-      show = self.params["show"]
-      limit = self.params["limit"]
-      
       content_template = "widgets/rss_item.html"
       template = loader_env.get_template(content_template)
       rss_items_html = ""
 
+      if hasattr(feed.feed, "title") and feed.feed.title:
+        titles.add(feed.feed.title)
 
       # Loop through each entru
-      for idx, item in enumerate(feed.entries[:limit]):
+      for item in feed.entries[:limit]:
         if hasattr(item, "link"):
           link = item.link
         else:
@@ -152,8 +174,6 @@ class RSS(Widget):
             except Exception as e:
               pass
 
-        is_visible = show > idx if show is not None else True
-
         context = {
           "params": self.params,
           "widgetclass": self.widgetclass,
@@ -165,23 +185,33 @@ class RSS(Widget):
           "pub_ts": pub_dt.int_timestamp if pub_dt is not None else 0,
           "elapsed": self.elapsed_since(pub_dt),
           "tags": sorted(tags),
-          "shown": is_visible,
           "views": item_views,
           "feed_title": feed.feed.title if len(urls) > 1 and hasattr(feed.feed, "title") else None,
         }
 
         contexts.append(context)
 
+    url_error = list(url_errors.values())
+    if len(url_error) == len(set(urls)):
+      raise url_error[0]
+    elif len(url_error):
+      for e in url_error:
+        self.logger.debug(f"Issue retrieving feed: {str(e)}")
+
     # Sort all item contexts
     contexts = sorted(contexts, key=lambda c: c["pub_ts"], reverse=True)
 
-    for context in contexts:
+    for idx, context in enumerate(contexts[:limit]):
+      is_visible = show > idx if show is not None else True
+      context["shown"] = is_visible
       html_fragment = template.render(context)
       rss_items_html += html_fragment
 
     has_more_to_show = show < limit if show is not None else False
 
-    if hasattr(feed.feed, "title"):
+    if titles:
+      default_title = " / ".join(titles)
+    elif len(urls) == 1 and hasattr(feed.feed, "title"):
       default_title = feed.feed.title
     else:
       default_title = "Unknown Title"

@@ -299,12 +299,11 @@ window.addEventListener('load', (event) => {
     removeClass(node, clsName) {
       var classes = node.className.split(" ");
       var final = "";
-      for(var i = 0, il = classes.length; i < il; i++) {
-        var curCls = classes[i];
-        if(curCls !== clsName) {
-          final += " " + curCls;
-        }
-      }
+
+      classes.forEach(cls => {
+        final += (cls != clsName) ? ` ${cls}` : "";
+      });
+
       node.className = final.trim();
     }
 
