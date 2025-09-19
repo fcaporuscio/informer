@@ -11,7 +11,6 @@ from .chucknorris import *
 from .date import *
 from .garfield import *
 from .lobsters import *
-from .quote import *
 from .reddit import *
 from .ronswanson import *
 from .rss import *

@@ -64,8 +64,6 @@ Below are all the existing widgets at this point. They are all available to be u
 - **chucknorris**: Chuck Norris facts
 - **date**: display the time -- either your current time or from another timezone
 - **garfield**: display the daily Garfield comic strip
-- **quote**: displays a text and optional subtext. It can also ranomly select a 
-quote from a pre-defined list
 - **rss**: displays RSS feed entries
 - **lobsters**: displays RSS feed entries given a Lobsters tag
 - **openmeteo**: displays basic weather details (fetches more than currently displayed). This widget needs some love!
