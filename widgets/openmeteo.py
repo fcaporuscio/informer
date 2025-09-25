@@ -211,9 +211,24 @@ class OpenMeteo(Widget):
     dps_temperature = self._convert_df_datevalue_to_tsvalue(hourly_dataframe, "date", "temperature", tz=tz)
     dps_precipitation = self._convert_df_datevalue_to_tsvalue(hourly_dataframe, "date", "precipitation", tz=tz)
 
+    now = pendulum.now(tz=tz)
+    precip_cur = None
+    precip_next = None
+
+    for dt, value in dps_precipitation:
+      precip_dt = pendulum.parse(dt, tz=tz)
+      if value:
+        minutes_since_precip = (now - precip_dt).total_minutes()
+        if precip_cur is None and now > precip_dt and minutes_since_precip < 60:
+          precip_cur = (self._jsdate(precip_dt.int_timestamp, tz=tz), value, minutes_since_precip)
+        if precip_next is None and precip_dt > now:
+          precip_next = (self._jsdate(precip_dt.int_timestamp, tz=tz), value, (precip_dt - now).total_minutes())
+
     data = {
       "temperature": dps_temperature,
       "precipitation": dps_precipitation,
+      "precipitation_current": precip_cur,
+      "precipitation_upcoming": precip_next,
     }
 
     return data

@@ -7,6 +7,8 @@ window.addEventListener('load', (event) => {
       this.chart = null;
       this.current_temperature = this.node.querySelector(".current-temperature");
       this.relative_humidity = this.node.querySelector(".relhum");
+      this.precip_current = this.node.querySelector(".precipitation-current");
+      this.precip_next = this.node.querySelector(".precipitation-upcoming");
       this.setRefreshInterval(2 * 60);
     }
 
@@ -37,9 +39,41 @@ window.addEventListener('load', (event) => {
     _make_chart_config(data, units) {
       var i, il, d;
 
+      const date_formatter = new informer.DateFormatter();
+      const no_value = "--";
+
       const hourly_data = data?.hourly || {};
       const daily_data = data?.daily || {};
       const day_names = data?.day_names || null;
+
+      const precip_current = hourly_data?.precipitation_current;
+      if(precip_current != null) {
+        const current_dt = new Date(precip_current[0]);
+        const p_dt = date_formatter.formatDate(current_dt, "${hour:12}:${minute:0}${ampm}");
+        this.precip_current.innerText = precip_current ? `${precip_current[1].toString()}mm` : no_value;
+      }
+      else {
+        this.precip_current.innerText = no_value;
+      }
+
+      const precip_upcoming = hourly_data?.precipitation_upcoming;
+      if(precip_upcoming != null) {
+        const upcoming_dt = new Date(precip_upcoming[0]);
+
+        var format = "";
+        if(precip_upcoming[2] > 6*60) {
+          format = "${month:short} ${day}, ${hour:12}:${minute:0}${ampm}";
+        }
+        else {
+          format = "${hour:12}:${minute:0}${ampm}";
+        }
+
+        const p_dt = date_formatter.formatDate(upcoming_dt, format);
+        this.precip_next.innerText = precip_upcoming ? `${precip_upcoming[1].toString()}mm (${p_dt})` : no_value;
+      }
+      else {
+        this.precip_next.innerText = no_value;
+      }
 
       var temperature = [],
           precip_mm = [],

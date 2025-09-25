@@ -1,12 +1,14 @@
 .widget-openmeteo {
-  .current {
+  .current, .precipitation {
     width: 100%;
-
-    border-bottom: 1px solid {{ theme.widget_border_color }};
     padding: 0 0 .5rem;
   }
 
-  .current-temperature, .relhum {
+  .precipitation {
+    border-bottom: 1px solid {{ theme.widget_border_color }};
+  }
+
+  .current-temperature, .relhum, .precipitation-current, .precipitation-upcoming {
     &::before {
       display: block;
       font-size: .75rem;
@@ -32,6 +34,33 @@
       content: "Relative Humidity";
     }
   }
+
+  .precipitation-current {
+    width: 100%;
+    text-wrap: nowrap;
+
+    &::before {
+      content: "Precip. (Now)";
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .precipitation-upcoming {
+    text-align: right;
+    text-wrap: nowrap;
+
+    &::before {
+      content: "Precip. (Next)";
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+
 
   .openmeteo-chart-container {
     position: relative;
