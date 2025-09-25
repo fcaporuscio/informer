@@ -315,7 +315,7 @@ theme:
 
 ---
 
-## Contributions
+# Contributions
 
 You have an idea? Great! Make it come to life via a widget!
 
@@ -329,7 +329,7 @@ Here are some widget ideas:
 
 ---
 
-## Widgets with Known Issues
+# Widgets with Known Issues
 
 Some widgets are known to have issues that will need to be addressed:
 - **rss**: requests.get() is used to fetch the XML data, but some feeds
