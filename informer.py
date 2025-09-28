@@ -19,7 +19,7 @@ from templates import *
 from widgets import WIDGETS_BY_TYPE, Widget
 
 
-__VERSION__ = (1, 0, 0)
+__VERSION__ = (1, 0, 1)
 
 CONFIG_FILENAME_DEFAULT = "informer.yml"
 CONFIG_FILEPATH_DEFAULT = f"{os.path.join(os.path.dirname(__file__), CONFIG_FILENAME_DEFAULT)}"
@@ -182,20 +182,6 @@ def get_config_hash(config: dict) -> str:
   md5 = hashlib.md5(b"InformerConfig")
   md5.update(config_str.encode())
   return md5.hexdigest()
-
-
-#
-# App Requests
-#
-
-# @app.after_request
-# def add_header(r):
-#     """Add headers to both force latest IE rendering engine or Chrome
-#     Frame, and also to cache the rendered page."""
-#     r.headers["Cache-Control"] = CACHE_CONTROL
-#     r.headers["Pragma"] = "no-cache"
-#     r.headers["Expires"] = "0"
-#     return r
 
 
 #
