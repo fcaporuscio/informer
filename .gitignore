@@ -3,5 +3,8 @@
 *.pyc
 *.yml
 *.yml.*
-.cache/*
+.cache
+__pycache__
 LICENSE
+uv.lock
+

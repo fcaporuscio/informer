@@ -1,5 +1,0 @@
-# open-meteo requirements
-openmeteo-requests
-retry-requests
-numpy
-pandas

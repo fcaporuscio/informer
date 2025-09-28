@@ -1,5 +1,6 @@
 informer.yml
 Dockerfile
 samples
+uv.lock
 *.md
 ./.*
