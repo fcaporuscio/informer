@@ -81,7 +81,7 @@ class SiteStatus(Widget):
       url = url_entry.get("url")
       status_accept = sorted(url_entry.get("status_accept"))
 
-      random_cache_duration = random.randint(max([1, cache_duration // 1.15]), cache_duration)
+      random_cache_duration = random.randint(int(max([1, cache_duration // 1.15])), cache_duration)
 
       if isinstance(url, str) and url and isinstance(status_accept, list) and status_accept:
         try:
