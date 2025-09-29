@@ -371,6 +371,9 @@ html, body {
   background-color: #933 !important;
   color: #fff !important;
   background-image: none !important;
+  {% if settings.hide_errors %}
+  display: none;
+  {% endif %}
 }
 
 

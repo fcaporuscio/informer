@@ -58,6 +58,12 @@ window.addEventListener('load', (event) => {
 
     _fullyLoaded() {
       informer.addClass(this.node, "loaded");
+
+      var loaderNode = this.node.querySelector(".loader");
+      while(loaderNode) {
+        informer.removeClass(loaderNode, "loader");
+        loaderNode = this.node.querySelector(".loader");
+      }
     }
 
     _fetchData(force) {

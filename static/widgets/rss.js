@@ -28,8 +28,6 @@ window.addEventListener('load', (event) => {
       if(data.has_more_to_show) {
         informer.addClass(this.node, "has-more");
       }
-
-      informer.removeClass(this.rss_items, "loader");
     }
   }
 

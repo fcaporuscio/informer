@@ -13,7 +13,6 @@ window.addEventListener('load', (event) => {
       const randomIdx = (Date.now() % 10) % quotes.length;
 
       this.quote.innerText = quotes[randomIdx];
-      informer.removeClass(this.container, "loader");
     }
   }
 

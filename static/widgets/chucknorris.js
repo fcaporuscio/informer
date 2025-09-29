@@ -6,21 +6,10 @@ window.addEventListener('load', (event) => {
     start() {
       this.container = this.node.querySelector(".container");
       this.quote = this.container.querySelector(".quote");
-      this.icon = this.container.querySelector(".icon");
     }
 
     receiveData(data) {
       this.quote.innerText = data.value;
-
-      if(this.icon != null) {
-        this.icon.src = data.icon_url;
-
-        this.icon.addEventListener('load', (event) => {
-          informer.removeClass(this.icon, "hidden");
-        });
-      }
-
-      informer.removeClass(this.container, "loader");
     }
   }
 

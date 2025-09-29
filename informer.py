@@ -19,7 +19,7 @@ from templates import *
 from widgets import WIDGETS_BY_TYPE, Widget
 
 
-__VERSION__ = (1, 0, 1)
+__VERSION__ = (1, 0, 2)
 
 CONFIG_FILENAME_DEFAULT = "informer.yml"
 CONFIG_FILEPATH_DEFAULT = f"{os.path.join(os.path.dirname(__file__), CONFIG_FILENAME_DEFAULT)}"
@@ -248,7 +248,7 @@ def get_stylesheet():
 
   cfg = Config()
   template = loader_env.get_template("styles/informer.css")
-  response = Response(template.render({ "theme": cfg.theme }))
+  response = Response(template.render({ "theme": cfg.theme, "settings": cfg.global_settings }))
   response.headers["Content-Type"] = "text/css"
   response.headers["Cache-Control"] = CACHE_CONTROL
   response.headers["Pragma"] = "no-cache"
@@ -278,7 +278,7 @@ def get_custom_stylesheet(custom_css: str):
 
   cfg = Config()
   template = loader_env.get_template(f"styles/widgets/{custom_css}")
-  response = Response(template.render({ "theme": cfg.theme }))
+  response = Response(template.render({ "theme": cfg.theme, "settings": cfg.global_settings }))
   response.headers["Content-Type"] = "text/css"
   response.headers["Cache-Control"] = CACHE_CONTROL
   response.headers["Pragma"] = "no-cache"

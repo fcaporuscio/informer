@@ -27,9 +27,6 @@ window.addEventListener('load', (event) => {
         if(this.chart != null) {
           this.chart.destroy();
         }
-        else {
-          informer.removeClass(ctx, "loader");
-        }
 
         const config = this._make_chart_config(data, units);
         this.chart = new Chart(ctx, config);

@@ -10,7 +10,6 @@ window.addEventListener('load', (event) => {
 
     receiveData(data) {
       this.content.innerHTML = data.html;
-      informer.removeClass(this.content, "loader");
     }
   }
 

@@ -46,16 +46,18 @@ class Config:
     try:
       with open(self.config_path) as fp:
         load_data = yaml.safe_load(fp.read())
-        load_data = self._ensure_slug(load_data)
+        load_data = self._sanitize(load_data)
         setattr(self, "_load_data", load_data)
         return load_data
     except Exception as e:
       print(f"Error parsing the config file: {str(e)}")
     return None
 
-  def _ensure_slug(self, config: dict):
-    """Ensures each page has a slug definition. Modifies the config
-    dictionary and returns it."""
+  def _sanitize(self, config: dict):
+    """Ensures each page has a slug definition and that hidden pages
+    get removed. Modifies the config dictionary and returns it."""
+
+    pages = []
 
     if "pages" in config and isinstance(config["pages"], list):
       for page in config["pages"]:
@@ -66,6 +68,10 @@ class Config:
           if name and not slug:
             slug = page_name(name)
             page["slug"] = slug
+
+          if not page.get("hide") is True:
+            pages.append(page)
+      config["pages"] = pages
 
     return config
 
@@ -97,6 +103,27 @@ class Config:
             theme.update({ self._theme_property(k): get_hex_color(v) })
 
     return theme
+
+  @property
+  def global_settings(self):
+    """Returns settings defined in the config file."""
+
+    config = self.load(use_cache=True)
+    user_settings_items = config.get("settings")
+    if not isinstance(user_settings_items, list):
+      user_settings_items = []
+
+    user_settings = {}
+    for usi in user_settings_items:
+      if isinstance(usi, dict) and len(usi) == 1:
+        user_settings.update(usi)
+
+    settings = {
+      "hide_errors": False,
+    }
+
+    settings.update(user_settings)
+    return settings
 
   def _get_default_theme(self):
     """Returns the default theme data. Any of these can be overwritten

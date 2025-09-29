@@ -216,7 +216,7 @@ class Widget:
       self.params["fetch"] = True
 
     try:
-      self.init()
+      self.init_data = self.init()
     except Exception as e:
       raise WidgetInitException(str(e)) from e
 
@@ -360,10 +360,13 @@ class Widget:
   #
   # Public Methods
   #
-  def init(self) -> None:
+  def init(self) -> dict | None:
     """Widgets should override this if they have work to do during the
-    __init__."""
-    return
+    __init__. If some data is prepared, return it in a dictionary. This
+    data will be available in the templates via 'data'. If no data is
+    needed, return None."""
+
+    return None
 
   def get_requests(self, cache_duration: int | str | None = None) -> requests_cache.CachedSession:
     """Returns the requests_cache's session or plain requests object
@@ -488,9 +491,15 @@ class Widget:
         context.update(**extras)
 
       context.update(**self.get_render_context())
-      context.update(**{ "params": self.params, "widgetclass": self.widgetclass, "this": self })
+      context.update(**{ "params": self.params, "widgetclass": self.widgetclass, "data": self.init_data, "this": self })
 
-      widget_html = template.render(context)
+      try:
+        widget_html = template.render(context)
+      except Exception as e:
+        return f"""<div class="widget widget-error">""" \
+               f"""Error renderting template: <b>{str(e)}</b>""" \
+               f"""</div>"""
+
       context["widget_html"] = widget_html
       return template_base.render(context)
 
