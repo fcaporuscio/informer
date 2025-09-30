@@ -21,9 +21,8 @@ class Cache:
   """This is used to save bits of information that has already been
   parsed (so that we don't need to re-parse it for some time)."""
 
-  CACHE_DIR = ".cache"
-  FULL_CACHE_DIR = f"./{CACHE_DIR}"
-  USE_USER_CACHE = False  # Only gets set via use_devel_cache_dir().
+  CACHE_DIR = "informer"
+  FULL_CACHE_DIR = user_cache_dir(CACHE_DIR, CACHE_DIR)
 
   re_cache_duration = re.compile(r'^(\d+)(s|m|h|d)')
 
@@ -59,15 +58,6 @@ class Cache:
       parts.append((results["s"], "s"))
     return " ".join([ f"{value}{value_type}" for value, value_type in parts ])
 
-  def use_devel_cache_dir(self):
-    """This should only be used when running the development server,
-    otherwise we want to use the default where the cache directory is
-    in the app directory."""
-
-    self.CACHE_DIR = "informer"
-    self.FULL_CACHE_DIR = user_cache_dir(self.CACHE_DIR, self.CACHE_DIR)
-    self.USE_USER_CACHE = True
-
   def get_requests_session(self, widget, duration: int) -> requests_cache.CachedSession:
     """Retrieve the 'requests' to be used to make web requests. This
     may be a requests_cache or plain requests, based on the widget
@@ -83,7 +73,7 @@ class Cache:
     if session is None:
       session = requests_cache.CachedSession(cache_file,
                                              backend='sqlite',
-                                             use_cache_dir=self.USE_USER_CACHE,
+                                             use_cache_dir=True,
                                              expire_after=duration)
       self._request_sessions[cache_file] = session
 

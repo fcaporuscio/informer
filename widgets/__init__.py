@@ -25,7 +25,7 @@ from .xkcd import *
 try:
   from .openmeteo import *
 except ModuleNotFoundError:
-  print("Disabled 'openmeteo' Widget -> 'pip install -r requirements-openmeteo.txt'.\n")
+  print("Disabled 'openmeteo' Widget -> 'uv sync --group openmeteo'.\n")
 
 
 #

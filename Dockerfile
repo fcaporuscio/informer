@@ -15,5 +15,5 @@ RUN mkdir /var/log/gunicorn && chmod 777 /var/log/gunicorn
 
 EXPOSE 8181/tcp
 
-# Run gunicorn with 4 threads
-CMD ["uv", "run", "--with", "gunicorn", "gunicorn", "--bind", "0.0.0.0:8181", "informer:app", "--threads", "4", "--access-logfile", "/var/log/gunicorn/informer.log", "--error-logfile", "/var/log/gunicorn/informer-error.log"]
+# Run gunicorn with 6 workers
+CMD ["uv", "run", "--with", "gunicorn", "gunicorn", "--bind", "0.0.0.0:8181", "informer:app", "--threads", "1", "--workers", "6", "--access-logfile", "/var/log/gunicorn/informer.log", "--error-logfile", "/var/log/gunicorn/informer-error.log"]

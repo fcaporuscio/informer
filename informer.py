@@ -19,7 +19,8 @@ from templates import *
 from widgets import WIDGETS_BY_TYPE, Widget
 
 
-__VERSION__ = (1, 0, 2)
+__version__ = "1.0.3"
+
 
 CONFIG_FILENAME_DEFAULT = "informer.yml"
 CONFIG_FILEPATH_DEFAULT = f"{os.path.join(os.path.dirname(__file__), CONFIG_FILENAME_DEFAULT)}"
@@ -42,11 +43,6 @@ CORS(app)
 #
 # Methods
 #
-
-def get_version() -> str:
-  """Returns the version as a string."""
-  return ".".join(map(str, __VERSION__))
-
 
 def main():
   """This is the entry point for the CLI."""
@@ -118,7 +114,7 @@ def main():
     return
 
   # Let's start with the version!
-  print(f" * Informer v{ '.'.join(map(str, __VERSION__)) }")
+  print(f" * Informer v{__version__}")
 
   # Let's make sure the configuration file exists.
   if not os.path.exists(args.config):
@@ -243,7 +239,7 @@ def get_named_page(page: str):
   theme = Config().theme
 
   # Instantiate our Page and return its html.
-  p = Page(config, page_config, theme, f"{get_version()}-{config_hash}")
+  p = Page(config, page_config, theme, f"{__version__}-{config_hash}")
   return p.html
 
 
@@ -360,8 +356,6 @@ signal.signal(signal.SIGTERM, handle_shutdown)
 
 if __name__ == '__main__':
   # Development
-  print("Running Development Server")
-  CACHE.use_devel_cache_dir()
   main()
 else:
   # WSGI - Setup the config path

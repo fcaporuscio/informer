@@ -1,6 +1,6 @@
 [project]
 name = "informer"
-version = "1.0.2"
+dynamic = ["version"]
 requires-python = ">=3.11"
 dependencies = [
     "feedparser>=6.0.12",
@@ -20,3 +20,11 @@ openmeteo = [
     "pandas>=2.3.2",
     "retry-requests>=2.0.0",
 ]
+
+[tool.hatch.version]
+path = "informer.py"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
