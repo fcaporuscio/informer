@@ -60,7 +60,7 @@ class OpenMeteo(Widget):
     timezone = self.params["timezone"]
     try:
       pendulum.now(tz=timezone)
-    except Exception as e:
+    except Exception:
       raise WidgetInitException(f"Invalid 'timezone' value specified: {timezone}")
 
     units = self.params["units"]
@@ -153,7 +153,10 @@ class OpenMeteo(Widget):
         "current": self._get_current_data(response),
       })
 
-      day_names = [ pendulum.now(tz=tz).start_of("day").add(days=i).format("ddd") for i in range(params["forecast_days"] )]
+      day_names = [
+        pendulum.now(tz=tz).start_of("day").add(days=i).format("ddd")
+        for i in range(params["forecast_days"])
+      ]
 
       if self.params.graph:
         weather_data.update({
@@ -203,7 +206,7 @@ class OpenMeteo(Widget):
     hourly_data["precipitation"] = hourly_precipitation
     hourly_dataframe = pd.DataFrame(data=hourly_data)
 
-    # Remove last day, so that it matches with the daily data (this is 
+    # Remove last day, so that it matches with the daily data (this is
     # why we request an extra day to begin with).
     end_date = pendulum.from_timestamp(hourly.TimeEnd(), tz=tz).subtract(days=1)
     hourly_dataframe = hourly_dataframe[hourly_dataframe["date"] < end_date]

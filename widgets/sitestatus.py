@@ -5,7 +5,6 @@ import random
 from templates import *
 from core.cache import CACHE
 from .widget import *
-from .widget import ParamsJSONEncoder
 
 
 __all__ = ["SiteStatus"]
@@ -52,7 +51,6 @@ class SiteStatus(Widget):
       assert isinstance(url_entry, dict)
       assert "url" in url_entry
 
-      url = url_entry["url"]
       status_accept = url_entry.get("status_accept")
       if not isinstance(status_accept, list):
         status_accept = []
@@ -76,7 +74,6 @@ class SiteStatus(Widget):
 
     cache_duration = CACHE.duration_to_ts(self.params["cache"], as_seconds=True)
 
-
     for url_entry in self.params["urls"]:
       url = url_entry.get("url")
       status_accept = sorted(url_entry.get("status_accept"))
@@ -88,14 +85,18 @@ class SiteStatus(Widget):
           headers = { "User-Agent": self.user_agent }
           # We request stream=True so that we don't actually download the
           # content of the page.
-          response = self.web_fetch("GET", url, headers=headers, stream=True, timeout=2, expire_after=random_cache_duration)
+          response = self.web_fetch("GET", url,
+                                    headers=headers,
+                                    stream=True,
+                                    timeout=2,
+                                    expire_after=random_cache_duration)
           is_ok = response.status_code in status_accept
           status_code = response.status_code
 
           el = response.elapsed.total_seconds()
           elapsed = f"{el:0.2f}"
 
-        except Exception as e:
+        except Exception:
           is_ok = False
           status_code = "Err"
           elapsed = None
@@ -112,7 +113,7 @@ class SiteStatus(Widget):
           domain, uri = url_no_proto.split("/", 1)
           if not uri:
             uri = None
-        except:
+        except Exception:
           domain = url_no_proto.split("/", 1)[0]
           uri = None
 

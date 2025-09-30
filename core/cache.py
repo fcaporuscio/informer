@@ -37,20 +37,19 @@ class Cache:
     minute = 60
     hour = minute * 60
     day = hour * 24
-    week = day * 7
     results = {
-      "s": duration_seconds,
-      # "w": 0,
       "d": 0,
       "h": 0,
       "m": 0,
+      "s": duration_seconds
     }
+
     items = (
-      # (week, "w"),
       (day, "d"),
       (hour, "h"),
-      (minute, "m"),
+      (minute, "m")
     )
+
     for item_duration, item_fld in items:
       while results["s"] >= item_duration:
         results[item_fld] += 1
@@ -82,7 +81,10 @@ class Cache:
         session = None
 
     if session is None:
-      session = requests_cache.CachedSession(cache_file, backend='sqlite', use_cache_dir=self.USE_USER_CACHE, expire_after=duration)
+      session = requests_cache.CachedSession(cache_file,
+                                             backend='sqlite',
+                                             use_cache_dir=self.USE_USER_CACHE,
+                                             expire_after=duration)
       self._request_sessions[cache_file] = session
 
       now = pendulum.now().int_timestamp
@@ -110,7 +112,7 @@ class Cache:
 
       try:
         duration = int(duration)
-      except:
+      except Exception:
         pass
 
       stat = os.stat(path)
@@ -144,14 +146,14 @@ class Cache:
         total_size += cache_file["size"]
         last_modified = cache_file["last_modified"]
         mod_dt = pendulum.from_timestamp(int(last_modified), tz=tz).format("YYYY-MM-DD h:mmA").lower()
-        print(f"{cache_file['widget']:>15s}  {self._human_readable_duration(cache_file['duration']):<8s}  {cache_file['size']:>12d}  {mod_dt:<18s}")
+        print(f"{cache_file['widget']:>15s}  "
+              f"{self._human_readable_duration(cache_file['duration']):<8s}  "
+              f"{cache_file['size']:>12d}  {mod_dt:<18s}")
 
       print(f"{'-' * 15}  {'-' * 8}  {'-' * 12}  {'-' * 18}")
       print(f"{'total bytes:':<26s} {total_size:>12d}")
-      # print(f"{'total kb:':<24s} {total_size // 1000:>12d}")
       return len(file_data)
     return 0
-
 
   def clean_cache(self, widget_type: str = None) -> int:
     """Removes the cached files for the cache directory and return the
@@ -178,7 +180,6 @@ class Cache:
 
     return total_removed
 
-
   def duration_to_ts(self, duration_code: str, as_seconds: bool = False) -> int:
     """Converts our cache duration values to an actual timestamp (unless
     as_seconds is True). The duration values have the following format,
@@ -187,7 +188,7 @@ class Cache:
       - <n>m: n number of minutes
       - <n>h: n number of hours
       - <n>d: n number of days
-    
+
     Example: 1h would create a timestamp that is 'now + 1 hour', or 3600
     if 'as_seconds' is True.
 

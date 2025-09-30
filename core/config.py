@@ -132,26 +132,26 @@ class Config:
 
     return {
       # Page
-      "page_background_color"              : "#222222",
-      "accent_color"                       : "#ffa500",
+      "page_background_color": "#222222",
+      "accent_color": "#ffa500",
 
       # Sections (headers, tabs, etc.)
-      "section_color"                      : "gray",
-      "section_hover_color"                : "lightgray",
-      "section_active_color"               : "white",
+      "section_color": "gray",
+      "section_hover_color": "lightgray",
+      "section_active_color": "white",
 
       # Links
-      "link_visited_foreground_color"      : "#666666",
-      "link_hover_foreground_color"        : "white",
-      "link_active_foreground_color"       : "darkgoldenrod",
+      "link_visited_foreground_color": "#666666",
+      "link_hover_foreground_color": "white",
+      "link_active_foreground_color": "darkgoldenrod",
 
       # Widgets
-      "widget_colored_header"              : False,
-      "widget_background_color"            : "#292931",
-      "widget_foreground_color"            : "#999999",
-      "widget_border_color"                : "#323232",
+      "widget_colored_header": False,
+      "widget_background_color": "#292931",
+      "widget_foreground_color": "#999999",
+      "widget_border_color": "#323232",
 
       # Misc.
-      "success_color"                      : "#3f8f75",
-      "failure_color"                      : "#c24f3f",
+      "success_color": "#3f8f75",
+      "failure_color": "#c24f3f",
     }

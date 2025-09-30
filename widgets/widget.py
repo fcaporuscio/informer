@@ -66,7 +66,6 @@ class WidgetWebFetchException(WidgetException):
   pass
 
 
-
 #
 # Widget Logging
 #
@@ -85,6 +84,7 @@ class ParamsJSONEncoder(json.JSONEncoder):
 
 class Params:
   """Simple setter/getter backed by a dictionary."""
+
   def __init__(self):
     self.__dict__ = {}
 
@@ -140,7 +140,7 @@ class Widget:
   # this class. It is meant to create the widget container with the
   # appropriate classes.
   TEMPLATE_BASE_HTML = "widget_base.html"
-  
+
   # Define a list of ("name", validator) options where name will be the
   # property name and validator is a type of a callable. A field is
   # considered valid if 1) it is of that type, or 2) the callable
@@ -180,7 +180,10 @@ class Widget:
   REQUESTS_SESSION_CACHE_TIMEOUT = 60  # Default timeout (gets ignored if widget has a 'cache' param)
 
   @classmethod
-  def MAKE_ARGUMENTS(cls, arguments_list: list | tuple, cache: str | None = None, ignore: list | tuple | None = None) -> list[tuple | list]:
+  def MAKE_ARGUMENTS(cls,
+                     arguments_list: list | tuple,
+                     cache: str | None = None,
+                     ignore: list | tuple | None = None) -> list[tuple | list]:
     """Specify the Widget arguments and cache (using a duration_code
     such as '1m', '5m', '1h', etc). We will automatically include all
     the base arguments. We can ignore base arguments by including
@@ -189,7 +192,10 @@ class Widget:
     assert isinstance(arguments_list, (list, tuple))
     if not isinstance(ignore, (list, tuple)):
       ignore = []
-    assert all([ isinstance(ignore_item, str) for ignore_item in ignore ]), f"All items in the ignore list should be str."
+    assert all([
+      isinstance(ignore_item, str)
+      for ignore_item in ignore
+    ]), f"All items in the ignore list should be str."
 
     args = cls.ARGUMENTS + list(arguments_list)
     if isinstance(cache, str):
@@ -291,7 +297,8 @@ class Widget:
 
   @property
   def user_agent(self) -> str:
-    return self.USER_AGENT or "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+    return self.USER_AGENT or \
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 
   #
   # Private Methods
@@ -316,7 +323,7 @@ class Widget:
         # The third option, default value, is optional and will default
         # to None if not specified.
         assert len(widget_args) >= 2
-      except AssertionError as e:
+      except AssertionError:
         raise WidgetArgumentException(f"Invalid argument definition: {widget_args}")
 
       # Grab the name, type/validator, and default value.
@@ -326,25 +333,27 @@ class Widget:
       # Validate the argument supplied.
       assert isinstance(name, str) and len(name) > 0
       assert isinstance(validator, type) \
-        or isinstance(validator, type_set) \
-        or callable(validator)
+          or isinstance(validator, type_set) \
+          or callable(validator)
 
       arg = self.kwargs.get(name)
       if arg is None and default_value is not None:
         arg = default_value
 
       valid = False
-      valid = isinstance(arg, validator) \
-        if isinstance(validator, type) \
-          or isinstance(validator, type_set) \
+      valid = (
+        isinstance(arg, validator)
+        if isinstance(validator, type)
+        or isinstance(validator, type_set)
         else validator(arg)
+      )
 
       if valid:
         self.params[name] = arg
       elif arg is not None:
         raise WidgetArgumentValueException(
-          f"Parameter '{name}' (" \
-          f"{str(validator).replace('<', '&lt;').replace('>', '&gt;')}" \
+          f"Parameter '{name}' ("
+          f"{str(validator).replace('<', '&lt;').replace('>', '&gt;')}"
           f") is invalid in the configuration file. The validation failed")
 
   def _build_log_message(self, message: str) -> str:
@@ -439,9 +448,11 @@ class Widget:
     """We will cache for half the duration, as long as the
     duration code is not shorter than 2 minutes."""
 
-    o = duration_seconds = CACHE.duration_to_ts(duration_code, as_seconds=True)
+    def h(mins):
+      return mins // 2 // 60
+
+    duration_seconds = CACHE.duration_to_ts(duration_code, as_seconds=True)
     if duration_seconds > 120:
-      h = lambda mins: mins // 2 // 60
       new_duration = h(duration_seconds)
       while new_duration >= 120:
         new_duration = h(new_duration * 60)

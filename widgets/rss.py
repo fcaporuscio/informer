@@ -66,7 +66,7 @@ class RSS(Widget):
     contexts = []
     url_errors = {}
     titles = set()
-      
+
     show = self.params["show"]
     limit = self.params["limit"]
 
@@ -115,7 +115,7 @@ class RSS(Widget):
           link = item.link
         else:
           link = None
-        
+
         if hasattr(item, "title"):
           title = item.title
         else:
@@ -139,7 +139,6 @@ class RSS(Widget):
             item_views = self.short_value(media_statistics.get("views"))
 
         if self.params["images"]:
-          thumbnail_url = None
           media_content = item.get("media_content")
           media_thumbnail = item.get("media_thumbnail")
 
@@ -171,7 +170,7 @@ class RSS(Widget):
               pub_dt = datetime.datetime.strptime(pub_date, date_format)
               pub_dt = pendulum.instance(pub_dt)
               break
-            except Exception as e:
+            except Exception:
               pass
 
         context = {

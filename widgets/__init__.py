@@ -5,7 +5,7 @@ __all__ = ["load_widget", "WidgetFinder"]
 
 
 # Import the base Widget class and all other valid widgets here. They
- # are only considered valid widgets if they are imported here.
+# are only considered valid widgets if they are imported here.
 from .widget import *
 from .chucknorris import *
 from .date import *
@@ -24,7 +24,7 @@ from .xkcd import *
 # automatically get excluded if we cannot import them.
 try:
   from .openmeteo import *
-except ModuleNotFoundError as e:
+except ModuleNotFoundError:
   print("Disabled 'openmeteo' Widget -> 'pip install -r requirements-openmeteo.txt'.\n")
 
 

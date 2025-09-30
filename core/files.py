@@ -9,7 +9,7 @@ from templates import *
 __all__ = ["get_bundle_hash", "load_bundle_contents"]
 
 
-def get_bundle_hash(bundle_files, bundle_type) -> str:
+def get_bundle_hash(bundle_files: list, bundle_type: str) -> str:
   """Returns the md5 hash for the file bundle."""
 
   bundled_text = load_bundle_contents(bundle_files, bundle_type)
@@ -18,7 +18,7 @@ def get_bundle_hash(bundle_files, bundle_type) -> str:
   return md5.hexdigest()
 
 
-def load_bundle_contents(bundle_files, bundle_type) -> str:
+def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
   """Load the contents of the bundle and return is as a single string."""
 
   if isinstance(bundle_files, str):

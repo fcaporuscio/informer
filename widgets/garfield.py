@@ -55,9 +55,9 @@ class Garfield(Widget):
         latest_date = self.get_latest_date()
 
         if date < earliest_date or date > latest_date:
-          raise WidgetFetchDataException(f"Invalid Garfield date specified. The date must be between " \
-                          f"{earliest_date.format('YYYY-MM-DD')} and "
-                          f"{latest_date.format('YYYY-MM-DD')}.")
+          raise WidgetFetchDataException(f"Invalid Garfield date specified. The date must be between "
+                                         f"{earliest_date.format('YYYY-MM-DD')} and "
+                                         f"{latest_date.format('YYYY-MM-DD')}.")
       except Exception as e:
         if isinstance(e, WidgetFetchDataException):
           exc = str(e)
@@ -73,7 +73,7 @@ class Garfield(Widget):
     if date is None:
       try:
         date = self.generate_random_date() if is_random else self.get_latest_date()
-      except Exception as e:
+      except Exception:
         date = pendulum.now().start_of("day")
 
     if exc is None:
@@ -109,7 +109,7 @@ class Garfield(Widget):
     self.log_debug(f"Retrieving Page information: {month_url}")
 
     response = self.web_fetch("GET", month_url)
-    
+
     regexp = f"""<img src="([^"]+)\" alt="garfield {day}/{month}/{year}"/>"""
     for line in response.iter_lines():
       line = str(line)

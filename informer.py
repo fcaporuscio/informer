@@ -6,7 +6,7 @@ import hashlib
 import os
 import signal
 import sys
-import yaml
+import types
 
 from flask import Flask, Response, redirect, request, url_for
 from flask_cors import CORS
@@ -49,6 +49,7 @@ def get_version() -> str:
 
 
 def main():
+  """This is the entry point for the CLI."""
   # Get out parser and parse the user-supplied args (or defaults).
   parser = get_argument_parser()
   args = parser.parse_args()
@@ -58,10 +59,10 @@ def main():
       args.action = CACHE_COMMAND_LIST
 
     if args.action.lower() not in ALL_CACHE_COMMANDS:
-      print(f"Use one of the following commands: " \
+      print(f"Use one of the following commands: "
             f"{', '.join(ALL_CACHE_COMMANDS)}.")
       return
-    
+
     handle_cache_command(args)
     return
 
@@ -91,7 +92,7 @@ def main():
         validator_str = f"{validator.__name__}() function"
       else:
         validator_str = "unknown"
-      
+
       param_str = f"    {name:}: {validator_str}"
       print(f"{param_str:<30s} -> default = {str(default_value)}")
 
@@ -128,7 +129,7 @@ def main():
     return 1
 
   # Initialize our config and start our Flask app.
-  cfg = Config(args.config)
+  _ = Config(args.config)
   print(f" * Config file: {args.config}")
   app.run(host=args.host, port=args.port)
 
@@ -138,18 +139,23 @@ def get_argument_parser() -> argparse.ArgumentParser:
   parser = argparse.ArgumentParser(description="Informer - Stay Informed", add_help=False)
 
   # Arguments
-  parser.add_argument("--host", "-h", type=str, default=HOST_DEFAULT, help=f"Host (default={HOST_DEFAULT}).")
-  parser.add_argument("--port", "-p", type=int, default=PORT_DEFAULT, help=f"Port (default={PORT_DEFAULT}).")
-  parser.add_argument("--config", type=str, default=CONFIG_FILEPATH_DEFAULT, help=f"Config file path (default={CONFIG_FILEPATH_DEFAULT}).")
-  parser.add_argument("--show-config", type=str, choices=WIDGETS_BY_TYPE.keys(), help="Show the configurable parameters for a widget.")
-  parser.add_argument("-H", "--help", action="help", help="Show this help message and exit.")
+  parser.add_argument("--host", "-h", type=str, default=HOST_DEFAULT,
+                      help=f"Host (default={HOST_DEFAULT}).")
+  parser.add_argument("--port", "-p", type=int, default=PORT_DEFAULT,
+                      help=f"Port (default={PORT_DEFAULT}).")
+  parser.add_argument("--config", type=str, default=CONFIG_FILEPATH_DEFAULT,
+                      help=f"Config file path (default={CONFIG_FILEPATH_DEFAULT}).")
+  parser.add_argument("--show-config", type=str, choices=WIDGETS_BY_TYPE.keys(),
+                      help="Show the configurable parameters for a widget.")
+  parser.add_argument("-H", "--help", action="help",
+                      help="Show this help message and exit.")
 
   subparsers = parser.add_subparsers(dest="command", help="Available commands")
   cache_parser = subparsers.add_parser(CACHE_COMMAND, help="Manage the app cache.")
   cache_subparsers = cache_parser.add_subparsers(dest="action", help="Cache actions")
-  list_parser = cache_subparsers.add_parser(CACHE_COMMAND_LIST, help="List cached files.")
+  _ = cache_subparsers.add_parser(CACHE_COMMAND_LIST, help="List cached files.")
   clean_parser = cache_subparsers.add_parser(CACHE_COMMAND_CLEAN, help="Clean/Delete cached files.")
-  clean_parser.add_argument("widget", nargs="?", help="Specific widget to clean.")  
+  clean_parser.add_argument("widget", nargs="?", help="Specific widget to clean.")
 
   return parser
 
@@ -209,7 +215,7 @@ def get_page():
 def get_named_page(page: str):
   """Will load the config information for this specific page."""
 
-  user_agent = request.headers.get("User-Agent");
+  user_agent = request.headers.get("User-Agent")
   Widget.USER_AGENT = user_agent
 
   config = Config().load()
@@ -263,7 +269,7 @@ def bundler(bundle_files, bundle_type):
 
   bundled_text = load_bundle_contents(bundle_files, bundle_type)
   response = Response(bundled_text)
-  response.headers["Content-Type"] = "text/javascript" if bundle_type == "js" else "text/css"
+  response.headers["Content-Type"] = "text/javascript" if bundle_type in ("js", "informerjs") else "text/css"
   response.headers["Cache-Control"] = CACHE_CONTROL
   response.headers["Pragma"] = "no-cache"
   response.headers["Expires"] = "0"
@@ -333,7 +339,7 @@ def widget_data(widget_type: str) -> dict:
       data["error"] = str(e)
 
   response = {}
-  response.update(data);
+  response.update(data)
   response.update({ "widget_id": widget_id })
 
   return response
@@ -343,9 +349,10 @@ def widget_data(widget_type: str) -> dict:
 # Signals
 #
 
-def handle_shutdown(signum, frame):
+def handle_shutdown(signum: int, frame: types.FrameType | None) -> None:
   print(f"\nReceived signal {signum}. Performing graceful shutdown...")
-  sys.exit(0) # Exit gracefully
+  sys.exit(0)  # Exit gracefully
+
 
 signal.signal(signal.SIGINT, handle_shutdown)
 signal.signal(signal.SIGTERM, handle_shutdown)
