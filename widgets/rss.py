@@ -80,7 +80,6 @@ class RSS(Widget):
       "Sec-Fetch-Mode": "navigate",
       "Sec-Fetch-Site": "none",
       "Sec-Fetch-User": "?1",
-      "Cache-Control": "max-age=0",
     }
 
     for url in urls:

@@ -3,6 +3,7 @@
 *.pyc
 *.yml
 *.yml.*
+*.sh
 .cache
 __pycache__
 LICENSE

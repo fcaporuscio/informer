@@ -7,7 +7,7 @@ COPY . /app
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Setup uv and install the packages
-RUN uv sync --group openmeteo
+RUN uv sync
 RUN uv add gunicorn 
 
 # Create the log directory
