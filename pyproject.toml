@@ -21,6 +21,9 @@ openmeteo = [
     "retry-requests>=2.0.0",
 ]
 
+[tool.uv]
+default-groups = "all"
+
 [tool.hatch.version]
 path = "informer.py"
 

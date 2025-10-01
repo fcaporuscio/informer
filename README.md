@@ -36,14 +36,18 @@ new widgets up and running.
 
 The open-meteo requirements are kept separate because the dependencies
 are large. Unless you intend to use the open-meteo widget, there is no
-need to install these.
+need to install these. These dependencies are stored in the **openmeteo**
+group.
 
 The requirements can be installed using uv by using one of the two
 options below:
 
 ```sh
-uv sync                    # this will install the core requirements
-uv sync --group openmeteo  # this will install the core and openmeteo dependencies
+# Install all the requirements
+uv sync
+
+# Install all requirements except those for specifically for openmeteo
+uv sync --no-group openmeteo
 ```
 
 ---
