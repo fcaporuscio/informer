@@ -1,12 +1,12 @@
 """Page is the core Class that creates the HTML page by combining the
 styles, css, javascript to load along with the widget HTML fragments."""
 
-__all__ = ["Page"]
-
-
 from core.files import *
 from templates import *
 from widgets import *
+
+
+__all__ = ["Page"]
 
 
 #

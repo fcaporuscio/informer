@@ -19,7 +19,7 @@ docker run -d -it --rm --network bridge \
   -e TZ=$(cat /etc/timezone) \
   -v ./informer.yml:/app/informer.yml \
   -v /tmp/informer/informer.log:/var/log/gunicorn/informer.log \
-  -v /tmp/informer/cache:/root/.cache/informer
+  -v /tmp/informer/cache:/root/.cache/informer \
   -p 8001:8181 \
   informer:latest
 ```

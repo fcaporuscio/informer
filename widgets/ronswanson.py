@@ -29,7 +29,10 @@ class RonSwanson(Widget):
     """Get a quote from Ron!"""
 
     headers = headers = { "User-Agent": self.user_agent }
-    response = self.web_fetch("GET", f"{self.URL}/{self.params['number']}", headers=headers, timeout=2)
+    response = self.web_fetch("GET",
+                              f"{self.URL}/{self.params['number']}",
+                              headers=headers,
+                              timeout=2)
 
     if not response.ok:
       raise WidgetFetchDataException(f"Failed to fetch a Ron Swanson quote!")

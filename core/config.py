@@ -1,7 +1,6 @@
 """Config Loader. Loads the config file and prepares the Themes (uses
 defaults that can get overwritten by config settings)."""
 
-import re
 import yaml
 
 from templates.loader import get_hex_color, page_name
@@ -33,7 +32,7 @@ class Config:
     """Sets the configuration path."""
     self.config_path = config_path
 
-  def load(self, use_cache: bool = False):
+  def load(self, use_cache: bool = False) -> dict | None:
     """Load the latest config from disk, or use the cache if we already
     have it and use_cache is True. Typically, we wouldn't want to load
     from cache, as we'd want to make sure we load all the latest updates
