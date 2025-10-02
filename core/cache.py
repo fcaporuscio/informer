@@ -170,6 +170,134 @@ class Cache:
 
     return total_removed
 
+  def prune_cache(self) -> None:
+    """Go through the data found on disk and remove expired entries
+    from these files. Returns the number of files pruned."""
+
+    fd = {}
+    cleaned = []
+
+    file_data = self.list_cache_files_meta()
+    if file_data:
+      from widgets import WIDGETS_BY_TYPE
+
+      for file_meta in file_data:
+        widget_type = file_meta.get("widget")
+        widget = WIDGETS_BY_TYPE.get(widget_type)
+        if widget is None:
+          continue
+
+        key = f"{widget_type}-{file_meta['duration']}"
+        fd[key] = file_meta["size"]
+
+        session_args = {
+          "widget": widget(create_object_only=True),
+          "duration": file_meta["duration"],
+        }
+
+        session = self.get_requests_session(**session_args)
+        session.cache.delete(expired=True)
+
+      size_delta = 0
+      file_data2 = self.list_cache_files_meta()
+      for file_meta in file_data2:
+        widget_type = file_meta.get("widget")
+        duration = file_meta.get("duration")
+        key = f"{widget_type}-{duration}"
+        if key in fd:
+          size_then = fd[key]
+          size_now = file_meta["size"]
+          if size_now != size_then:
+            delta = (size_now - size_then)
+            size_delta += delta
+            cleaned.append((
+              file_meta["path"],
+              self._human_readable_duration(duration),
+              delta * -1
+            ))
+
+    if cleaned:
+      print("")
+      print(f"There are {len(cleaned)} cache file(s) to prune:")
+      total_size = 0
+      for path, duration_code, bytes_saved in cleaned:
+        print(f"  - Pruned {path}...")
+        total_size += bytes_saved
+      print(f"\nPruned {len(cleaned)} cache file(s) for a total of "
+            f"{total_size} bytes ({total_size // 1000} kb).")
+
+    return len(cleaned)
+
+  def remove_invalid_cache_files(self, widgets: list) -> int:
+    """Checks the widget list and determine all possible cache files
+    based on it. If any file is invalid (meaning that no current widget
+    would use this file) then the file gets removed from disk."""
+
+    total_removed = 0
+    total_size = 0
+    valid = set()
+    to_remove = set()
+
+    for cfg in widgets:
+      # Attempt to find all possible "durations" for this widget
+      cache_duration = cfg.get("cache")
+      if cache_duration is None:
+        cache_duration = cfg['_widget'].params["cache"]
+
+      if cache_duration is None:
+        timeout = cfg['_widget'].REQUESTS_SESSION_CACHE_TIMEOUT
+        if isinstance(timeout, int):
+          cache_duration = f"{timeout}s"
+
+      try:
+        duration = self.duration_to_ts(cache_duration, as_seconds=True)
+      except InvalidCacheDuration:
+        continue
+
+      durations = { duration }
+      alternate_durations = cfg["_widget"].ALTERNATE_CACHE_DURATIONS
+      if isinstance(alternate_durations, str):
+        alternate_durations = [alternate_durations]
+      if isinstance(alternate_durations, list):
+        for duration in alternate_durations:
+          try:
+            durations.add(self.duration_to_ts(duration, as_seconds=True))
+          except InvalidCacheDuration:
+            pass
+
+      # Keep track of all valid selections (meaning that these are
+      # possible caches based on the widgets in the config file.
+      for duration in durations:
+        key = f"{cfg['_widget'].cache_widget_type}-{self._human_readable_duration(duration)}"
+        valid.add(key)
+
+    # Compare to the cache files on disk. If they are not valid, flag
+    # them for removal.
+    files_meta = self.list_cache_files_meta()
+    for file_meta in files_meta:
+      key = f"{file_meta['widget']}-{self._human_readable_duration(file_meta['duration'])}"
+      if key not in valid:
+        path = file_meta["path"]
+        to_remove.add(path)
+
+    # Process the cache files to remove
+    if to_remove:
+      print(f"\nThere are {len(to_remove)} file(s) to remove:")
+      for path in to_remove:
+        try:
+          print(f"  - Removing {path}...")
+          os.unlink(path)
+          total_removed += 1
+          total_size += file_meta["size"]
+        except Exception as e:
+          print(f"    - Failed: {str(e)}")
+          continue
+
+    if total_removed:
+      print(f"\nRemoved {total_removed} cached file(s) for a total of {total_size} bytes ({total_size // 1000} kb).")
+
+    return total_removed
+
   def duration_to_ts(self, duration_code: str, as_seconds: bool = False) -> int:
     """Converts our cache duration values to an actual timestamp (unless
     as_seconds is True). The duration values have the following format,

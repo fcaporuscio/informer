@@ -27,6 +27,13 @@ class ChuckNorris(Widget):
 
   HAS_REQUESTS_SESSION = True
 
+  # We cache the "cateogries" for a year (since these don't change
+  # often, maybe never). We store this value in ALTERNATE_CACHE_DURATIONS
+  # so that the cache file will be considered valid when attempting to
+  # prune the cache.
+  CACHE_DURATION_1Y = "365d"
+  ALTERNATE_CACHE_DURATIONS = [CACHE_DURATION_1Y]
+
   def get_cache_key(self):
     return self.classname
 
@@ -37,7 +44,12 @@ class ChuckNorris(Widget):
     headers = { "User-Agent": self.user_agent }
 
     # Retrieve the category list
-    response = self.web_fetch("GET", self.URL_CATEGORIES, headers=headers, timeout=2, cache_duration="1d")
+    response = self.web_fetch("GET",
+                              self.URL_CATEGORIES,
+                              headers=headers,
+                              timeout=2,
+                              cache_duration=self.CACHE_DURATION_1Y)
+
     if response.ok:
       categories = response.json()
       if not self.params["explicit"] and "explicit" in categories:

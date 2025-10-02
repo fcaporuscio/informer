@@ -16,10 +16,10 @@ from core.config import *
 from core.files import *
 from core.page import *
 from templates import *
-from widgets import WIDGETS_BY_TYPE, Widget
+from widgets import WIDGETS_BY_TYPE, Widget, WidgetFinder
 
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 
 CONFIG_FILENAME_DEFAULT = "informer.yml"
@@ -30,7 +30,8 @@ PORT_DEFAULT = 8080
 CACHE_COMMAND = "cache"
 CACHE_COMMAND_LIST = "list"
 CACHE_COMMAND_CLEAN = "clean"
-ALL_CACHE_COMMANDS = (CACHE_COMMAND_LIST, CACHE_COMMAND_CLEAN)
+CACHE_COMMAND_PRUNE = "prune"
+ALL_CACHE_COMMANDS = (CACHE_COMMAND_LIST, CACHE_COMMAND_CLEAN, CACHE_COMMAND_PRUNE)
 
 CACHE_CONTROL = "public, max-age=31536000, immutable"
 
@@ -49,18 +50,6 @@ def main():
   # Get out parser and parse the user-supplied args (or defaults).
   parser = get_argument_parser()
   args = parser.parse_args()
-
-  if args.command == CACHE_COMMAND:
-    if not args.action:
-      args.action = CACHE_COMMAND_LIST
-
-    if args.action.lower() not in ALL_CACHE_COMMANDS:
-      print(f"Use one of the following commands: "
-            f"{', '.join(ALL_CACHE_COMMANDS)}.")
-      return
-
-    handle_cache_command(args)
-    return
 
   if args.show_config:
     widget_type = args.show_config
@@ -113,9 +102,6 @@ def main():
 
     return
 
-  # Let's start with the version!
-  print(f" * Informer v{__version__}")
-
   # Let's make sure the configuration file exists.
   if not os.path.exists(args.config):
     print(f"Unable to load the configuration file: '{args.config}'")
@@ -126,7 +112,23 @@ def main():
 
   # Initialize our config and start our Flask app.
   _ = Config(args.config)
+
+  if args.command == CACHE_COMMAND:
+    if not args.action:
+      args.action = CACHE_COMMAND_LIST
+
+    if args.action.lower() not in ALL_CACHE_COMMANDS:
+      print(f"Use one of the following commands: "
+            f"{', '.join(ALL_CACHE_COMMANDS)}.")
+      return
+
+    handle_cache_command(args)
+    return
+
+  # Let's start with the version!
+  print(f" * Informer v{__version__}")
   print(f" * Config file: {args.config}")
+
   app.run(host=args.host, port=args.port)
 
 
@@ -150,6 +152,7 @@ def get_argument_parser() -> argparse.ArgumentParser:
   cache_parser = subparsers.add_parser(CACHE_COMMAND, help="Manage the app cache.")
   cache_subparsers = cache_parser.add_subparsers(dest="action", help="Cache actions")
   _ = cache_subparsers.add_parser(CACHE_COMMAND_LIST, help="List cached files.")
+  _ = cache_subparsers.add_parser(CACHE_COMMAND_PRUNE, help="Prune caches")
   clean_parser = cache_subparsers.add_parser(CACHE_COMMAND_CLEAN, help="Clean/Delete cached files.")
   clean_parser.add_argument("widget", nargs="?", help="Specific widget to clean.")
 
@@ -174,6 +177,42 @@ def handle_cache_command(args: argparse.Namespace) -> None:
       msg += "!"
 
       print(msg)
+
+  elif args.action == CACHE_COMMAND_PRUNE:
+    # We need to prune existing and valid cache files as well as
+    # delete cache files that are no longer valid (ie. the current
+    # config files has no references to an existing cache file).
+
+    # Load the config and determine all the widget types + duration
+    # combinations
+    config = Config().load()
+    pages = config.get("pages")
+    all_widgets = []
+    for page in pages:
+      cols = page.get("columns")
+      if not cols or not isinstance(cols, list):
+        continue
+      for col in cols:
+        widgets = col.get("widgets")
+        if not widgets or not isinstance(widgets, list):
+          continue
+        all_widgets.extend(widgets)
+
+    page = {
+      "name": "p",
+      "slug": "p",
+      "columns": [{
+        "size": "wide",
+        "widgets": all_widgets,
+      }],
+    }
+
+    all_widgets = WidgetFinder(page).find_widgets()
+    num_removed = CACHE.remove_invalid_cache_files(all_widgets)
+    num_pruned = CACHE.prune_cache()
+    if num_pruned == 0 and num_removed == 0:
+      print("\nThere are no cache files to prune or remove!")
+
   else:
     print("Invalid cache command: '{args.action}'")
 

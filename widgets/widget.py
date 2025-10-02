@@ -119,10 +119,30 @@ class Params:
 
 
 #
-# Widget
-# Base Class
+# WidgeBase Class
 #
-class Widget:
+
+class WidgetBase:
+  """This base class is used to valdate incoming arguments. The __init__
+  method should return a boolean where False means we should simply
+  instantiate the object, with no init code,"""
+
+  def __init__(self, *args, **kwargs):
+    # 'create_object_only' is use strictly for the cache pruner (we need
+    # to instantiate the object to obtain it's 'cache_widget_type'). If
+    # this kwarg is supplied we must return False.
+    create_object_only = kwargs.pop("create_object_only", None) is True
+    if create_object_only:
+      return False
+    return True
+
+
+#
+# Widge Class
+# All Widgets should inherit from this class.
+#
+
+class Widget(WidgetBase):
   """Base class. All widgets must inherit from this class. All widgets
   should implement the 'html' property. This is the HTML fragment that
   gets added to the page."""
@@ -179,6 +199,11 @@ class Widget:
   HAS_REQUESTS_SESSION = False
   REQUESTS_SESSION_CACHE_TIMEOUT = 60  # Default timeout (gets ignored if widget has a 'cache' param)
 
+  # Set to a list of alternate/valid cache durations for this widget if
+  # the widget requires a secondary request cache that does not follow
+  # the default value.  Example: ["365d"]
+  ALTERNATE_CACHE_DURATIONS = None
+
   @classmethod
   def MAKE_ARGUMENTS(cls,
                      arguments_list: list | tuple,
@@ -210,6 +235,10 @@ class Widget:
     return args
 
   def __init__(self, *args, **kwargs):
+    if not WidgetBase.__init__(self, *args, **kwargs):
+      # If the widget base returns False we must stop here!
+      return
+
     self.logger = logging.getLogger(__name__)
     self._init_cache()
 
