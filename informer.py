@@ -79,7 +79,7 @@ def main():
         validator_str = "unknown"
 
       param_str = f"    {name:}: {validator_str}"
-      print(f"{param_str:<30s} -> default = {str(default_value)}")
+      print(f"{param_str:<30s}  # default = {str(default_value)}")
 
       if name in args_config:
         for idx, sub_args in enumerate(args_config[name]):
