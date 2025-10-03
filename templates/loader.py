@@ -104,6 +104,32 @@ def sorted_list(items: list) -> list:
   return sorted(items)
 
 
+def short_value(value: int | None) -> str | None:
+  """Shortes a value (eg. 1234 -> 1.2K)."""
+
+  if value is None:
+    return None
+
+  if isinstance(value, str) and value.isdigit():
+    value = int(value)
+
+  if not isinstance(value, int):
+    return value
+
+  val = str(value)
+
+  if len(val) > 9:
+    ret_val = f"{value // 10000000 / 100.0:.1f}B"
+  elif len(val) > 6:
+    ret_val = f"{value // 10000 / 100.0:.1f}M"
+  elif value >= 1000:
+    ret_val = f"{value // 10 / 100.0:.1f}K"
+  else:
+    ret_val = f"{value}"
+
+  return ret_val.replace(".0", "")
+
+
 #
 # Assign custom filters
 #
@@ -111,3 +137,4 @@ loader_env.filters["hex_color"] = get_hex_color
 loader_env.filters["hex_color_alpha"] = get_hex_color_with_alpha
 loader_env.filters["page_name"] = page_name
 loader_env.filters["sorted"] = sorted_list
+loader_env.filters["short_value"] = short_value

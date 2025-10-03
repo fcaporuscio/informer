@@ -106,6 +106,10 @@ html, body {
     color: {{ theme.section_active_color }};
   }
 
+  .fg-widget {
+    color: {{ theme.widget_foreground_color }};
+  }
+
   .text-no-wrap {
     text-wrap: nowrap;
   }

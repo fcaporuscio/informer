@@ -10,6 +10,7 @@ from .widget import *
 from .chucknorris import *
 from .date import *
 from .garfield import *
+from .github import *
 from .lobsters import *
 from .reddit import *
 from .ronswanson import *

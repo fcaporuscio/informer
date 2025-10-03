@@ -1,0 +1,111 @@
+.widget-github {
+  .item {
+    color: {{ theme.section_active_color }};
+    margin-bottom: .5rem;
+
+    &::before {
+      display: block;
+      font-size: .86em;
+      color: {{ theme.section_color }};
+    }
+  }
+
+  .repository {
+    &::before {
+      content: "Repository";
+    }
+
+    .avatar {
+      float: left;
+      margin-right: 0.125rem;
+    }
+  }
+
+  .last-update {
+    &::before {
+      content: "Last Update";
+    }
+  }
+
+  .num-issues {
+    &::before {
+      content: "Issues";
+    }
+  }
+
+  .star-gazers {
+    &::before {
+      content: "Stars";
+    }
+  }
+
+  .watchers {
+    &::before {
+      content: "Watchers";
+    }
+  }
+
+  .forks {
+    &::before {
+      content: "Forks";
+    }
+  }
+
+  .description {
+    &::before {
+      content: "Description";
+    }
+  }
+
+  .latest-release {
+    &::before {
+      content: "Latest Release";
+    }
+
+    .release-name {
+      color: {{ theme.accent_color|hex_color_alpha(220) }};
+    }
+
+    .by {
+      color: {{ theme.widget_foreground_color }};
+    }
+
+  }
+
+  .license {
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: thin;
+
+    &::before {
+      content: "License";
+    }
+  }
+
+  .visibility {
+    display: block;
+    font-size: .75rem;
+
+    &.private {
+      content: "Private";
+      color: {{ theme.failure_color }};
+    }
+
+    &.public {
+      content: "Public";
+      color: {{ theme.success_color }};
+    }
+  }
+
+  img.avatar {
+    max-width: 33px;
+    border: 1px solid {{ theme.widget_border_color }};
+    border-radius: 4px;
+  }
+
+  .content.loader:empty {
+    margin: 0 auto;
+  }
+}

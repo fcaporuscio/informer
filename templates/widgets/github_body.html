@@ -1,0 +1,31 @@
+{% if license.name and params.license %}
+    <div class="item license">
+        {{ license.name }}
+    </div>
+{% endif %}
+
+{% if params.stats %}
+<div class="counts flex flex-r">
+    <div class="item star-gazers">{{ stargazers_count|short_value }}</div>
+    <div class="item watchers">{{ watchers_count|short_value }}</div>
+    {% if allow_forking %}<div class="item forks">{{ forks_count|short_value }}</div>{% endif %}
+    {% if has_issues %}<div class="item num-issues">{{ open_issues|short_value }}</div>{% endif %}
+</div>
+{% endif %}
+
+{% if params.description %}
+    <div class="item description">{{ description }}</div>
+{% endif %}
+
+{% if latest_release and params.showrelease %}
+    <div class="item latest-release">
+        {{ latest_release.tag_name }}
+        {% if latest_release.name and latest_release.name != latest_release.tag_name %} (<span class="release-name">{{ latest_release.name }}</span>){% endif %}
+        <span class="release-date"></span>
+        {% if latest_release.author %} <span class="by">by</span> <span class="fg-highlight">{{ latest_release.author.login }}</span>{% endif %}
+    </div>
+{% endif %}
+
+<div class="row flex flex-r">
+    <div class="item last-update">--</div>
+</div>

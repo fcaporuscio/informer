@@ -1,0 +1,9 @@
+<div class="widget-header">GitHub Repository</div>
+<div class="widget-box">
+    <div class="repository item">
+        {{ params.owner }}/{{ params.repository }}
+        {% if params.avatar %}<span class="avatar"><img class="avatar"/></span>{% endif %}
+        <span class="visibility"></span>
+    </div>
+    <div class="content loader"></div>
+</div>

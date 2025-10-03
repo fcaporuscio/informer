@@ -333,7 +333,7 @@ You have an idea? Great! Make it come to life via a widget!
 Here are some widget ideas:
 
 - **Calendar**: This may be combined with the existing date widget;
-- **Repositories**: GitHub, GitLab, Gittea, etc. (maybe latest commits);
+- **Repositories**: GitLab, Gittea, etc. (maybe latest commits);
 - **Disk Space**: All disks or selected disks (total/free)
 - **CPU Usage**: Percentage, per core, graphs, etc.
 - **Memory Usage**: Current usage along with historical, graph, etc.
