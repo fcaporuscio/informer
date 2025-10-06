@@ -35,7 +35,7 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
         template = loader_env.get_template(f"styles/widgets/{filename}.css")
         bundled_text += f"/* {filename} */\n\n" + template.render({ "theme": cfg.theme }) + "\n\n\n"
       except Exception as e:
-        print(str(e))
+        print(make_bundle_file_error_message(bundle_type, e))
 
   elif bundle_type == "js":
     for filename in bundle_files:
@@ -45,7 +45,7 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
           bundled_text += file_text
           bundled_text += "\n\n\n"
       except Exception as e:
-        print(str(e))
+        print(make_bundle_file_error_message(bundle_type, e))
 
   elif bundle_type == "informerjs":
     for filename in bundle_files:
@@ -55,7 +55,7 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
           bundled_text += file_text
           bundled_text += "\n\n\n"
       except Exception as e:
-        print(str(e))
+        print(make_bundle_file_error_message(bundle_type, e))
 
   elif bundle_type == "informercss":
     for filename in bundle_files:
@@ -65,6 +65,10 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
           bundled_text += file_text
           bundled_text += "\n\n\n"
       except Exception as e:
-        print(str(e))
+        print(make_bundle_file_error_message(bundle_type, e))
 
   return bundled_text
+
+
+def make_bundle_file_error_message(bundle_type, error):
+  return f"Unable to load {bundle_type} file: {str(error)}"

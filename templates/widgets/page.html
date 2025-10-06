@@ -32,7 +32,7 @@
         </script>
     </head>
     <body id="app">
-        <div id="navbar">
+        <div id="navbar" tabindex="-1">
             {% for page in pages %}
                 <a href="{{ page.slug }}" class="nav-link{% if page.slug == config.slug %} active{% endif %}"{% if page.slug == config.slug %} onclick="return false;" tabindex="-1"{% endif %}>
                     <span class="nav-name">{{ page.name }}</span>

@@ -1,9 +1,3 @@
-{% if  params.license and license.name %}
-    <div class="item license">
-        {{ license.name }}
-    </div>
-{% endif %}
-
 {% if params.stats %}
 <div class="counts flex flex-r">
     <div class="item star-gazers">{{ stars_count|short_value }}</div>

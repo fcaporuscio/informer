@@ -75,6 +75,7 @@ Below are all the existing widgets at this point. They are all available to be u
 - **chucknorris**: Chuck Norris facts
 - **date**: display the time -- either your current time or from another timezone
 - **garfield**: display the daily Garfield comic strip
+- **gitea**: display basic information about a Gitea repository
 - **github**: display basic information about a GitHub repository
 - **rss**: displays RSS feed entries
 - **lobsters**: displays RSS feed entries given a Lobsters tag
@@ -100,11 +101,12 @@ Here are the parameter details for the SiteStatus widget:
 
 widgets:
   - type: sitestatus
-    name: str                  -> default = None
-    urls: list                 -> default = None
+    name: str                   # default = None
+    urls: list                  # default = None
       - name: str             
         url: str              
-    cache: str                 -> default = 1m
+        accept_status: list   
+    cache: str                  # default = 1m
 ```
 
 ## The 'cache' parameter

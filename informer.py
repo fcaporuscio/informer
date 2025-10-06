@@ -19,7 +19,7 @@ from templates import *
 from widgets import WIDGETS_BY_TYPE, Widget, WidgetFinder
 
 
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 
 
 CONFIG_FILENAME_DEFAULT = "informer.yml"

@@ -128,9 +128,17 @@ window.addEventListener('load', (event) => {
         "November",
         "December"
       ]
+
+      this.default_format = "${month:short} ${day}, ${year} ${hour:12}:${minute:0}${ampm}";
+
     }
 
     formatDate(date, format) {
+
+      if(format === undefined) {
+        format = this.default_format;
+      }
+
       var result = format;
       var formatters = {
         "${year}": this._format_Y,
@@ -250,6 +258,7 @@ window.addEventListener('load', (event) => {
       this.cls_tab_hidden = "tab-hidden";
       this.tabs = undefined;
       this.widgets = {};
+      this.widgetClasses = {};
       this.widgetParams = {};
       this._curWidgetID = 0;
       this.theme = {};
@@ -351,6 +360,10 @@ window.addEventListener('load', (event) => {
         widgetType = widgetClass.name.toLowerCase();
       }
 
+      if(this.widgetClasses[widgetClass.name] === undefined) {
+        this.widgetClasses[widgetClass.name] = widgetClass;
+      }
+
       var widgetsByWID = {};
       var widgetNodes = Array.from(document.getElementsByClassName("widget-" + widgetType));
       var createdWidgets = [];
@@ -403,6 +416,37 @@ window.addEventListener('load', (event) => {
       this.addClass(widget.node, "widget-error");
       widget.node.innerHTML = `<div>${error_message}</div>`;
     }
+
+    get_date_formatter() {
+      this._df = (this?._df) ? this._df : new this.DateFormatter();
+      return this._df;
+    }
+
+    ts_to_dt(ts, date_format) {
+      // Grab the timestamp (seconds) and generate a date based on the
+      // supplied format. If no format is supplied we will use a default.
+
+      const df = this.get_date_formatter();
+
+      if(date_format === undefined) {
+        date_format = df.default_format;
+      }
+
+      if(ts) {
+        return df.formatDate(new Date(ts * 1000), date_format);
+      }
+      return "";
+    }
+
+    loadScript(url, callback) {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = url;
+      if(callback) {
+        script.onload = callback;
+      }
+      document.head.appendChild(script);
+    }    
   }
 
   // Make sure the active 'page' link is in view.

@@ -1,4 +1,4 @@
-"""Widget: GitHub"""
+"""Widget: Gitea"""
 
 import pendulum
 
@@ -6,21 +6,22 @@ from templates import *
 from .widget import *
 
 
-__all__ = ["GitHub"]
+__all__ = ["Gitea"]
 
 
 #
-# GitHub Widget
+# Gitea Widget
 #
-class GitHub(Widget):
+class Gitea(Widget):
   """GitHub Repository Information"""
 
   ARGUMENTS = Widget.MAKE_ARGUMENTS(
     [
+      ("url",          str),
+      ("token",        str),
       ("owner",        str),
       ("repository",   str),
       ("description",  bool,  False),
-      ("license",      bool,  False),
       ("avatar",       bool,  True),
       ("showrelease",  bool,  True),
       ("stats",        bool,  True),
@@ -30,43 +31,52 @@ class GitHub(Widget):
   )
 
   SCRIPT = True
-  STYLES = True
+  STYLES = 'github'
+  WIDGET_CLASS_NAME = "github"
   POST_FETCH = True
-  URL_BASE = "https://api.github.com/repos"
+  URI_BASE = "/api/v1/repos"
 
   HAS_REQUESTS_SESSION = True
 
-  CONTENT_TEMPLATE = "widgets/github_body.html"
+  CONTENT_TEMPLATE = "widgets/gitea_body.html"
 
   def init(self):
     """Validate the parameters."""
 
+    url = self.params["url"]
+    token = self.params["token"]
     owner = self.params["owner"]
     repository = self.params["repository"]
 
-    if owner is None or repository is None:
-      raise WidgetInitException("Required parameters: owner, repository")
+    if url is None or token is None or owner is None or repository is None:
+      raise WidgetInitException("Required parameters: token, owner, repository")
 
   def fetch_data(self):
     """Fetch the repository information."""
 
+    url = self.params["url"]
+    token = self.params["token"]
     owner = self.params["owner"]
     repository = self.params["repository"]
-    headers = headers = { "User-Agent": self.user_agent }
 
-    url = f"{self.URL_BASE}/{owner}/{repository}"
+    headers = headers = {
+      "User-Agent": self.user_agent,
+      "Authorization": f"token {token}",
+    }
+
+    url = f"{url}{self.URI_BASE}/{owner}/{repository}"
     response = self.web_fetch("GET", url, headers=headers)
     if not response.ok:
-      raise WidgetFetchDataException(f"Failed to fetch the GitHub info for {owner}/{repository}")
+      raise WidgetFetchDataException(f"Failed to fetch the Gitea info for {owner}/{repository}")
     data = response.json()
 
     data = self.augment_date_fields(
       data,
-      ("created_at", "updated_at", "pushed_at")
+      ("created_at", "updated_at", "archived_at")
     )
 
-    data["stars_count"] = data.pop("stargazers_count", None)
-    data["open_issues_count"] = data.pop("open_issues", None)
+    data["visibility"] = "private" if data.get("private") is True else "public"
+    data["allow_forking"] = data.pop("fork", None) is True
 
     if self.params["showrelease"]:
       # Fetch the releases
@@ -76,12 +86,13 @@ class GitHub(Widget):
         # We'll only bother showing releases if we get a successful
         # response.
         releases = response_releases.json()
+
         if isinstance(releases, list) and len(releases) > 0:
           latest_release = releases[-1]
 
           latest_release = self.augment_date_fields(
             latest_release,
-            ("created_at", "updated_at", "published_at")
+            ("created_at", "published_at")
           )
 
           author_fields = ("login", "avatar_url")
@@ -96,13 +107,10 @@ class GitHub(Widget):
           release_fields = (
             "name",
             "tag_name",
-            "reactions"
             "created_at",
             "created_at_ts",
             "published_at",
             "published_at_ts",
-            "updated_at",
-            "updated_at_ts",
           )
 
           data["latest_release"].update({

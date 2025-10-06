@@ -1,4 +1,4 @@
-.widget-github {
+.widget-github, .widget.github {
   .item {
     color: {{ theme.section_active_color }};
     margin-bottom: .5rem;
@@ -100,9 +100,10 @@
   }
 
   img.avatar {
-    max-width: 33px;
+    max-width: 30px;
     border: 1px solid {{ theme.widget_border_color }};
     border-radius: 4px;
+    margin-top: 3px;
   }
 
   .content.loader:empty {
@@ -110,11 +111,21 @@
   }
 }
 
+#page {
+  .widget-github, .widget.github {
+    a.html-link {
+      &:link, &:visited {
+        color: {{ theme.section_active_color }};
+      }
+    }
+  }
+}
+
 
 @media screen and (min-resolution: 2dppx) {
-  .widget-github {
+  .widget-github, .widget.github {
     img.avatar {
-      max-width: 41px;
+      max-width: 36px;
     }
   }
 }
