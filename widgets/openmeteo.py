@@ -101,6 +101,8 @@ class OpenMeteo(Widget):
     return data
 
   def _jsdate(self, timestamp: int, tz: str) -> str:
+    """Converts the timestamp to an iso8601 string that JavaScript can
+    parse."""
     dt = pendulum.from_timestamp(timestamp, tz=tz).to_iso8601_string()
     return dt[:16]
 
@@ -113,6 +115,7 @@ class OpenMeteo(Widget):
     return ts_dps
 
   def _get_current_tz(self) -> str:
+    """Returns the host system's timezone."""
     now = pendulum.now()
     return now.timezone_name
 
@@ -169,6 +172,8 @@ class OpenMeteo(Widget):
     return None
 
   def _get_current_data(self, weather_response) -> dict:
+    """Returns the meta data (dict) for the current weather."""
+
     current = weather_response.Current()
     temperature = current.Variables(0).Value()
     relative_humidity = current.Variables(1).Value()

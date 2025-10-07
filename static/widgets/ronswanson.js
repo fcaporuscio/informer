@@ -1,6 +1,6 @@
 /* Ron Swanson Widget JS */
 
-window.addEventListener('load', (event) => {
+defineInformerWidget(() => {
 
   class RonSwanson extends informer.Widget {
     start() {

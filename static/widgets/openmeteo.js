@@ -1,6 +1,6 @@
 /* Open-Meteo Widget JS */
 
-window.addEventListener('load', (event) => {
+defineInformerWidget(() => {
 
   class OpenMeteo extends informer.Widget {
     start() {

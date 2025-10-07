@@ -1,7 +1,6 @@
 /* Date Widget JS */
 
-window.addEventListener('load', (event) => {
-
+defineInformerWidget(() => {
   /*
   ** Date Widget
   */

@@ -19,7 +19,7 @@ from templates import *
 from widgets import WIDGETS_BY_TYPE, Widget, WidgetFinder
 
 
-__version__ = "1.0.5"
+__version__ = "1.0.6"
 
 
 CONFIG_FILENAME_DEFAULT = "informer.yml"
@@ -385,6 +385,7 @@ def widget_data(widget_type: str) -> dict:
 #
 
 def handle_shutdown(signum: int, frame: types.FrameType | None) -> None:
+  """A signal has been received and a shutdown is required."""
   print(f"\nReceived signal {signum}. Performing graceful shutdown...")
   sys.exit(0)  # Exit gracefully
 

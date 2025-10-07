@@ -1,6 +1,6 @@
 /* GitHub Widget JS */
 
-window.addEventListener('load', (event) => {
+defineInformerWidget(() => {
 
   class GitHub extends informer.Widget {
     start() {
@@ -21,7 +21,7 @@ window.addEventListener('load', (event) => {
 
       // Set the link
       if(data?.html_url && this.link) {
-        this.link.src = data.html_url;
+        this.link.href = data.html_url;
       }
 
       // Set the repository visibility

@@ -258,7 +258,7 @@ window.addEventListener('load', (event) => {
       this.cls_tab_hidden = "tab-hidden";
       this.tabs = undefined;
       this.widgets = {};
-      this.widgetClasses = {};
+      this.widgetClasses = {};  // loaded class definitions will be stored here.
       this.widgetParams = {};
       this._curWidgetID = 0;
       this.theme = {};
@@ -360,6 +360,7 @@ window.addEventListener('load', (event) => {
         widgetType = widgetClass.name.toLowerCase();
       }
 
+      // Store te class definition if we don't already have it.
       if(this.widgetClasses[widgetClass.name] === undefined) {
         this.widgetClasses[widgetClass.name] = widgetClass;
       }
@@ -438,15 +439,80 @@ window.addEventListener('load', (event) => {
       return "";
     }
 
-    loadScript(url, callback) {
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = url;
-      if(callback) {
-        script.onload = callback;
-      }
-      document.head.appendChild(script);
-    }    
+    loadScript(url) {
+      const informer = this;
+
+      return new Promise((resolve, reject) => {
+        console.log(`[ Informer ] Loading Requirement: ${url}`);
+
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = url;
+
+        script.addEventListener("load", () => resolve(url));
+        script.onerror = () => reject(new Error(`Failed to load script: ${url}`));
+
+        document.head.appendChild(script);
+      });
+    }
+
+    requireWidget(widgetClassName, onReady, widgetJSName) {
+      // Another class is a dependency to this one, so we need to make
+      // sure it has been loaded before we attempt to use it.
+
+      /*
+      Example:
+
+      Let's assume our widget needs to extend SiteStatus instead
+      of informer.Widget:
+
+      requireWidget('SiteStatus', () => {
+        // The JS file 'sitestatus.js' is now loaded and therefore the
+        // SiteStatus class is available. We can create our new class
+        // like this:
+        //
+        // class MyNewClass extends informer.widgetClasses.SiteStatus {};
+        //
+        // informer.widgetClasses holds all classes that have been
+        // loaded. Note that these are not instances, they are the class
+        // definitions.
+      });
+      */
+
+      var fn = ((informer, widgetClassName, onReady, widgetJSName) => {
+        return function() {
+          if(widgetJSName === undefined) {
+            widgetJSName = `${widgetClassName.toLowerCase()}.js`;
+          }
+
+          if(typeof(widgetJSName) == "string" && widgetJSName.slice(-3) != ".js") {
+            widgetJSName = widgetJSName + ".js";
+          }
+
+          if(informer.widgetClasses[widgetClassName] === undefined) {
+            const filepath = `/static/widgets/${widgetJSName}`;
+            informer.loadScript(filepath)
+              .then(onReady)
+              .catch((err) => {
+                console.error(`Failure to load ${widgetJSName}`, {
+                  message: err.message,
+                  error_filename: err.fileName,
+                  error_lineno: err.lineNumber,
+                  filename_to_load: filepath
+                });
+              });
+          }
+          else {
+            // Already loaded!
+            onReady();
+          }
+        }
+      })(this, widgetClassName, onReady, widgetJSName);
+
+      // We do this at the end of the stack so that there is a chance
+      // that the dependency is already loaded.
+      setTimeout(fn, 0);
+    }
   }
 
   // Make sure the active 'page' link is in view.

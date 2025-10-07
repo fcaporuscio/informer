@@ -1,6 +1,6 @@
 /* Garfield Widget JS */
 
-window.addEventListener('load', (event) => {
+defineInformerWidget(() => {
 
   class Garfield extends informer.Widget {
     start() {
@@ -11,7 +11,7 @@ window.addEventListener('load', (event) => {
       this.back_button = this.node.querySelector("button");
 
       this.image.addEventListener("click", (event) => {
-        if(this.image.width < 598) {
+        if(this.image.width + 10 > this.image_container.clientWidth) {
           informer.addClass(this.image_container, "full");
         }
       });
@@ -22,9 +22,13 @@ window.addEventListener('load', (event) => {
     }
 
     receiveData(data) {
-      if(data.url) {
+      if(data?.url) {
         this.image.src = data.url;
         informer.removeClass(this.image_container, "hidden");
+
+        if(data?.safe_title) {
+          this.image.setAttribute("title", data.safe_title);
+        }
       }
 
       if(data.year && data.month && data.day) {

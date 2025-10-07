@@ -1,6 +1,6 @@
 /* Site Status JS */
 
-window.addEventListener('load', (event) => {
+defineInformerWidget(() => {
 
   class SiteStatus extends informer.Widget {
     start() {

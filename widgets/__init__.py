@@ -37,6 +37,7 @@ except ModuleNotFoundError:
 # the failed one.
 #
 class WidgetException(Widget):
+  """Generic Widget Exception."""
   ARGUMENTS = [
     ("exception", str),
   ]
@@ -78,11 +79,11 @@ def load_widget(widget_type: str, **kwargs):
 # Used to find all widgets defined within a config.
 #
 class WidgetFinder:
-  """Use this class to find widgets within a config. This will add
-  '_widget' to the existing widget entry in the config structure. The
-  value of _widget will be the instantiated Widget."""
-
   def __init__(self, config: dict):
+    """Use this class to find widgets within a config. This will add
+    '_widget' to the existing widget entry in the config structure. The
+    value of _widget will be the instantiated Widget."""
+
     assert isinstance(config, dict)
     self.config = config
     self._widget_id = 0

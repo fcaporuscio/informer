@@ -70,5 +70,6 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
   return bundled_text
 
 
-def make_bundle_file_error_message(bundle_type, error):
+def make_bundle_file_error_message(bundle_type: str, error: Exception):
+  """Returns a string showing the error."""
   return f"Unable to load {bundle_type} file: {str(error)}"

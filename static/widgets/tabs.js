@@ -1,6 +1,6 @@
 /* Tabs Widget JS */
 
-window.addEventListener('load', (event) => {
+defineInformerWidget(() => {
 
   class Tabs {
     constructor(informer) {

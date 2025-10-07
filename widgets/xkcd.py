@@ -38,4 +38,6 @@ class xkcd(Widget):
       raise WidgetFetchDataException(f"Retrieving the xkcd url failed.")
 
     results = response.json()
+    results["url"] = results.pop("img", None)
+
     return results

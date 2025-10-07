@@ -1,6 +1,6 @@
 /* Chuck Norris Widget JS */
 
-window.addEventListener('load', (event) => {
+defineInformerWidget(() => {
 
   class ChuckNorris extends informer.Widget {
     start() {

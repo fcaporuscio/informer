@@ -86,18 +86,23 @@ class Params:
   """Simple setter/getter backed by a dictionary."""
 
   def __init__(self):
+    """We start off with an empty dictionary."""
     self.__dict__ = {}
 
   def __getitem__(self, key: str):
+    """Return the value found for this key or None if the key is missing."""
     return self.__dict__.get(key)
 
   def __setitem__(self, key: str, value: any) -> None:
+    """Sets the key to this value."""
     self.__dict__[key] = value
 
   def __repr__(self) -> str:
+    """Returns a string representation of the internal dictionary."""
     return str(self)
 
   def __str__(self) -> str:
+    """Returns the JSON representation of the internal dictionary."""
     return self.json
 
   @property
@@ -128,9 +133,13 @@ class WidgetBase:
   instantiate the object, with no init code,"""
 
   def __init__(self, *args, **kwargs):
-    # 'create_object_only' is use strictly for the cache pruner (we need
-    # to instantiate the object to obtain it's 'cache_widget_type'). If
-    # this kwarg is supplied we must return False.
+    """Initialize our object and respect the arguments supplied.
+
+    Known kwargs:
+      - 'create_object_only': used strictly for the cache pruner (we
+        need to instantiate the object to obtain it's 'cache_widget_type').
+        If this kwarg is supplied we must return False."""
+
     create_object_only = kwargs.pop("create_object_only", None) is True
     if create_object_only:
       return False
@@ -235,6 +244,8 @@ class Widget(WidgetBase):
     return args
 
   def __init__(self, *args, **kwargs):
+    """Initialize our Widget."""
+
     if not WidgetBase.__init__(self, *args, **kwargs):
       # If the widget base returns False we must stop here!
       return
@@ -256,6 +267,7 @@ class Widget(WidgetBase):
       raise WidgetInitException(str(e)) from e
 
   def __repr__(self) -> str:
+    """Returns a string representation of our Widget."""
     return f"Widget-{self.classname}"
 
   #
@@ -263,10 +275,12 @@ class Widget(WidgetBase):
   #
   @property
   def classname(self) -> str:
+    """Returns the CSS class name to be used for this Widget."""
     return self.CLASSNAME or self.__class__.__name__
 
   @property
   def cache_widget_type(self):
+    """Returns the Widget type to be used when caching."""
     return self.classname.lower()
 
   @property
@@ -281,6 +295,8 @@ class Widget(WidgetBase):
 
   @property
   def uniqueclass(self) -> str:
+    """Returns a unique ID for the current Widget (this ID unique per
+    execution and not bound to an individual Widget)."""
     return f"wid-{id(self)}"
 
   @property
@@ -326,8 +342,11 @@ class Widget(WidgetBase):
 
   @property
   def user_agent(self) -> str:
+    """Returns the User-Agent to be used in the headers for web
+    queries."""
     return self.USER_AGENT or \
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " \
+        "(KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 
   #
   # Private Methods
@@ -386,6 +405,7 @@ class Widget(WidgetBase):
           f") is invalid in the configuration file. The validation failed")
 
   def _build_log_message(self, message: str) -> str:
+    """Returns a string that is prefixed with the Widget's class name."""
     return f"[{self.__class__.__name__}] {message}"
 
   def _get_template_file(self) -> str:
@@ -494,9 +514,11 @@ class Widget(WidgetBase):
     return CACHE.set_cache(self.cache_widget_type, key, data, duration_code)
 
   def log_debug(self, message: str):
+    """Logs a message for DEBUG."""
     return self.logger.debug(self._build_log_message(message))
 
   def log_info(self, message: str):
+    """Logs a message for INFO."""
     return self.logger.info(self._build_log_message(message))
 
   def get_template(self, template_file: str = None):

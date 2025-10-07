@@ -1,6 +1,6 @@
 /* RSS Widget JS */
 
-window.addEventListener('load', (event) => {
+defineInformerWidget(() => {
 
   class RSS extends informer.Widget {
     start() {

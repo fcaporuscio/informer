@@ -35,6 +35,8 @@ class ChuckNorris(Widget):
   ALTERNATE_CACHE_DURATIONS = [CACHE_DURATION_1Y]
 
   def get_cache_key(self):
+    """We use the classname as the cache key, so if the widget is found
+    on multiple pages it will still find the cache."""
     return self.classname
 
   def fetch_data(self):
