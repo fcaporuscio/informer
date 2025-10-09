@@ -40,8 +40,7 @@ are large. Unless you intend to use the open-meteo widget, there is no
 need to install these. These dependencies are stored in the **openmeteo**
 group.
 
-The requirements can be installed using uv by using one of the two
-options below:
+The requirements can be installed using uv by any of the following:
 
 ```sh
 # Install all the requirements
@@ -49,7 +48,12 @@ uv sync
 
 # Install all requirements except those for specifically for openmeteo
 uv sync --no-group openmeteo
+
+# Install all requirements except those for specifically for jsmin
+uv sync --no-group jsmin
 ```
+
+You can combine any number of --no-group items.
 
 ---
 

@@ -1,10 +1,16 @@
 """Core functions related to files."""
 
 import hashlib
-import rjsmin
 
 from core.config import *
 from templates import *
+
+
+try:
+  from rjsmin import jsmin
+except ModuleNotFoundError:
+  def jsmin(s):
+    return s
 
 
 __all__ = ["get_bundle_hash", "load_bundle_contents"]
@@ -69,7 +75,7 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
         print(make_bundle_file_error_message(bundle_type, e))
 
   if bundle_type in ("js", "informerjs"):
-    bundled_text = rjsmin.jsmin(bundled_text)
+    bundled_text = jsmin(bundled_text)
 
   return bundled_text
 

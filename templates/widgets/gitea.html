@@ -1,9 +1,1 @@
-<div class="widget-header">Gitea Repository</div>
-<div class="widget-box">
-    <div class="repository item">
-        <a class="html-link" target="_blank">{{ params.owner }}/{{ params.repository }}</a>
-        {% if params.avatar %}<span class="avatar"><img class="avatar"/></span>{% endif %}
-        <span class="visibility"></span><span class="language"></span>
-    </div>
-    <div class="content loader"></div>
-</div>
+{% extends "widgets/github.html" %}

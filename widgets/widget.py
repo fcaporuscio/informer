@@ -274,9 +274,14 @@ class Widget(WidgetBase):
   # Properties
   #
   @property
+  def cname(self) -> str:
+    """Returns the current Widget's actual class name."""
+    return self.__class__.__name__
+
+  @property
   def classname(self) -> str:
     """Returns the CSS class name to be used for this Widget."""
-    return self.CLASSNAME or self.__class__.__name__
+    return self.CLASSNAME or self.cname
 
   @property
   def cache_widget_type(self):
@@ -301,9 +306,7 @@ class Widget(WidgetBase):
 
   @property
   def html(self) -> str:
-    """This property needs to get overwritten by the widget class. By
-    default we include a fragment that let's us know the widget's html
-    property is missing!"""
+    """Renders and returns the HTML fragment for this Widget."""
 
     rendered_html = self.render()
     return rendered_html
@@ -406,7 +409,7 @@ class Widget(WidgetBase):
 
   def _build_log_message(self, message: str) -> str:
     """Returns a string that is prefixed with the Widget's class name."""
-    return f"[{self.__class__.__name__}] {message}"
+    return f"[{self.cname}] {message}"
 
   def _get_template_file(self) -> str:
     """Get the widget's template filename."""

@@ -80,9 +80,9 @@ def load_widget(widget_type: str, **kwargs):
 #
 class WidgetFinder:
   def __init__(self, config: dict):
-    """Use this class to find widgets within a config. This will add
-    '_widget' to the existing widget entry in the config structure. The
-    value of _widget will be the instantiated Widget."""
+    """Use this class to find widgets within a config. Using find_widget()
+    will add '_widget' to the existing widget entry in the config
+    structure. The value of _widget will be the instantiated Widget."""
 
     assert isinstance(config, dict)
     self.config = config

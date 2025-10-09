@@ -44,8 +44,6 @@ window.addEventListener('load', (event) => {
       }
     }
 
-    start() {}
-
     _initParams(params) {
       params = params || {};
 
@@ -73,6 +71,34 @@ window.addEventListener('load', (event) => {
       else {
         this._fullyLoaded();
       }
+    }
+
+    start() {}
+
+    /**
+     * Sets up fields for the current Widget. The fields_arr is an array
+     * of 2 items: [field_name, querySelector string].
+     * 
+     * Example:
+     *     setupDomFields([["my_field", ".fields.my-field"]])
+     * 
+     * This will create:
+     *     this.my_field = this.node.querySelector('.fields.my-field')
+     */
+    setupDomFields(fields_arr) {
+      const widget = this;
+
+      fields_arr.forEach(field_def => {
+        const [field_name, qs] = field_def;
+
+        if(widget[field_name] !== undefined) {
+          console.error(`setupDomFields: cannot assign '${field_name}' to widget since this field already exists`);
+        }
+        else {
+          widget[field_name] = widget.node.querySelector(qs);
+        }
+
+      });
     }
 
     refresh() {

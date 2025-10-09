@@ -4,9 +4,12 @@ defineInformerWidget(() => {
 
   class GitHub extends informer.Widget {
     start() {
-      this.visibility = this.node.querySelector(".visibility");
-      this.content = this.node.querySelector(".content");
-      this.link = this.node.querySelector(".html-link");
+      this.setupDomFields([
+        ["visibility", ".visibility"],
+        ["content", ".content"],
+        ["link", ".html-link"],
+        ["repository_name", ".repository-name"]
+      ]);
     }
 
     receiveData(data) {
@@ -22,6 +25,10 @@ defineInformerWidget(() => {
       // Set the link
       if(data?.html_url && this.link) {
         this.link.href = data.html_url;
+      }
+
+      if(data?.name && this?.repository_name) {
+        this.repository_name.innerText = data.name;
       }
 
       // Set the repository visibility
