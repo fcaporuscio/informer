@@ -1,3 +1,7 @@
+"""Define the HTML color names so that we can obtain their HEX color
+value."""
+
+
 def rgb2hex(r: int, g: int, b: int) -> str:
   """Returns the HTML color code for this RGB."""
   return f"#{r:02x}{g:02x}{b:02x}"

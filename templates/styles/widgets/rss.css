@@ -18,7 +18,7 @@
 
     .title {
       margin: .125rem 0 .25rem;
-      text-transform: capitalize;
+      /*text-transform: capitalize;*/
     }
 
     .elapsed {

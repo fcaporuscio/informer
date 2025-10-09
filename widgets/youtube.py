@@ -1,7 +1,7 @@
 """Widget: YouTube Videos."""
 
-from .widget import *
-from .rss import *
+from .widget import WidgetInitException
+from .rss import RSS
 
 
 __all__ = ["YouTube"]

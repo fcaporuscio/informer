@@ -2,8 +2,7 @@
 
 import pendulum
 
-from templates import *
-from .widget import *
+from .widget import Widget
 
 
 __all__ = ["Date"]

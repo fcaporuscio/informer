@@ -2,9 +2,9 @@
 
 import random
 
-from templates import *
+from templates import loader_env
 from core.cache import CACHE
-from .widget import *
+from .widget import Widget, WidgetInitException
 
 
 __all__ = ["SiteStatus"]

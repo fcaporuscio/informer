@@ -17,12 +17,12 @@ to define if they require CSS and JS files to be loaded.
 
 ```python
 # Import the important widget code (the 'Widget' class is the most
-# important here.
-from .widget import *
-
+# important here. Add any Exceptions that are needed.
+from .widget import Widget
 
 # Only import the important data when 'import *' is used. We do this so
-# that we dpn't polute the namespace where it is getting imported.
+# that we don't polute the namespace where it is getting imported. We
+# use 'import *' in widgets/__init__.py.
 __all__ = ["MyNewWidget"]
 
 
@@ -56,7 +56,7 @@ In order to make your widget available, you must import it in the
 *\_\_init\_\_.py* file:
 
 ```python
-from .mynewwidget import *
+from .mynewwidget import MyNewWidget
 ```
 
 ### The **ARGUMENTS** definition

@@ -11,11 +11,11 @@ import types
 from flask import Flask, Response, redirect, request, url_for
 from flask_cors import CORS
 
-from core.cache import *
-from core.config import *
-from core.files import *
-from core.page import *
-from templates import *
+from core.cache import CACHE
+from core.config import Config
+from core.files import load_bundle_contents
+from core.page import Page
+from templates import loader_env
 from widgets import WIDGETS_BY_TYPE, Widget, WidgetFinder
 
 

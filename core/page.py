@@ -1,9 +1,9 @@
 """Page is the core Class that creates the HTML page by combining the
 styles, css, javascript to load along with the widget HTML fragments."""
 
-from core.files import *
-from templates import *
-from widgets import *
+from core.files import get_bundle_hash
+from templates import loader_env
+from widgets import WidgetFinder
 
 
 __all__ = ["Page"]

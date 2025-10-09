@@ -1,6 +1,6 @@
 """Widget: xkcd"""
 
-from .widget import *
+from .widget import Widget, WidgetFetchDataException
 
 
 __all__ = ["xkcd"]

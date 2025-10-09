@@ -4,8 +4,8 @@ import datetime
 import feedparser
 import pendulum
 
-from templates import *
-from .widget import *
+from templates import loader_env
+from .widget import Widget, WidgetFetchDataException, WidgetInitException
 
 
 __all__ = ["RSS"]

@@ -2,8 +2,8 @@
 
 import hashlib
 
-from core.config import *
-from templates import *
+from core.config import Config
+from templates import loader_env
 
 
 try:

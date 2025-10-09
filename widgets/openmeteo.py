@@ -6,8 +6,7 @@ import pendulum
 
 from retry_requests import retry
 
-from templates import *
-from .widget import *
+from .widget import Widget, WidgetInitException
 
 
 __all__ = ["OpenMeteo"]

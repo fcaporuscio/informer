@@ -1,7 +1,7 @@
 import re
 
 from jinja2 import Environment, FileSystemLoader
-from .htmlcolors import *
+from .htmlcolors import HTML_COLORS
 
 
 __all__ = ["loader_env"]

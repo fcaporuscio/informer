@@ -1,6 +1,6 @@
 """Widget: Tabs"""
 
-from .widget import *
+from .widget import Widget
 
 
 __all__ = ["Tabs"]

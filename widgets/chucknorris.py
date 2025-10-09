@@ -2,7 +2,7 @@
 
 import random
 
-from .widget import *
+from .widget import Widget, WidgetFetchDataException
 
 
 __all__ = ["ChuckNorris"]
@@ -65,7 +65,7 @@ class ChuckNorris(Widget):
     response = self.web_fetch("GET", self.URL + qs, headers=headers, timeout=2)
 
     if not response.ok:
-      raise WidgetFetchDataException(f"Failed to fetch the feed: {url}")
+      raise WidgetFetchDataException(f"Failed to fetch the feed: {self.URL + qs}")
 
     results = response.json()
     return results

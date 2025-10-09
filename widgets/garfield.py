@@ -5,7 +5,7 @@ import pendulum
 import random
 import re
 
-from .widget import *
+from .widget import Widget, WidgetFetchDataException
 
 
 __all__ = ["Garfield"]

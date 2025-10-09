@@ -6,7 +6,7 @@ __all__ = ["load_widget", "WidgetFinder"]
 
 # Import the base Widget class and all other valid widgets here. They
 # are only considered valid widgets if they are imported here.
-from .widget import *
+from .widget import Widget
 from .chucknorris import *
 from .date import *
 from .garfield import *
@@ -27,7 +27,7 @@ from .xkcd import *
 try:
   from .openmeteo import *
 except ModuleNotFoundError:
-  print("Disabled 'openmeteo' Widget -> 'uv sync --group openmeteo'.\n")
+  print("Disabled 'openmeteo' Widget -> Missing required dependency.\n")
 
 
 #
