@@ -99,7 +99,7 @@ html, body {
   }
 
   .fg-highlight {
-    color: {{ theme.link_active_foreground_color }};
+    color: {{ theme.link_color }};
   }
 
   .fg-section {
@@ -169,7 +169,7 @@ html, body {
     }
     
     &:hover {
-      color: {{ theme.section_hover_color }};
+      color: {{ theme.section_active_color }};
       background-color: transparent;
     }
   }
@@ -216,15 +216,15 @@ html, body {
     }
     
     &:link {
-      color: {{ theme.link_active_foreground_color }};
+      color: {{ theme.link_color }};
     }
 
     &:visited {
-      color: {{ theme.link_visited_foreground_color|hex_color_alpha(130) }};
+      color: {{ theme.link_visited_color }};
     }
 
     &:hover {
-      color: {{ theme.link_hover_foreground_color }};
+      color: {{ theme.link_color }};
       text-decoration: underline;
       text-underline-offset: 4px;
     }

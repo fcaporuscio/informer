@@ -320,11 +320,9 @@ theme:
   - page_background_color: black
   - accent_color: "#2e8ed8"
   - section_color: goldenrod
-  - section_hover_color: gold
   - section_active_color: gold
-  - link_visited_foreground_color: gray
-  - link_hover_foreground_color: "#3f9fe9"
-  - link_active_foreground_color: "#ffffff"
+  - link_visited_color: gray
+  - link_color: "#ffffff"
   - widget_colored_header: false
   - widget_background_color: "#202020"
   - widget_foreground_color: lightgray

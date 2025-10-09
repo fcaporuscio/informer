@@ -86,7 +86,7 @@
     }
 
     &:hover {
-      color: {{ theme.section_hover_color }};
+      color: {{ theme.section_active_color }};
       background-color: transparent;
     }
   }

@@ -136,13 +136,11 @@ class Config:
 
       # Sections (headers, tabs, etc.)
       "section_color": "gray",
-      "section_hover_color": "lightgray",
       "section_active_color": "white",
 
       # Links
-      "link_visited_foreground_color": "#666666",
-      "link_hover_foreground_color": "white",
-      "link_active_foreground_color": "darkgoldenrod",
+      "link_visited_color": "#666666",
+      "link_color": "darkgoldenrod",
 
       # Widgets
       "widget_colored_header": False,
