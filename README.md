@@ -25,6 +25,7 @@ new widgets up and running.
 - [PyYAML](https://pypi.org/project/PyYAML/)
 - [requests](https://pypi.org/project/requests/)
 - [requests-cache](https://pypi.org/project/requests-cache/)
+- [rjsmin](https://pypi.org/project/rjsmin/)
 
 **Open-Meteo Requirements**
 
@@ -336,7 +337,6 @@ You have an idea? Great! Make it come to life via a widget!
 Here are some widget ideas:
 
 - **Calendar**: This may be combined with the existing date widget;
-- **Repositories**: GitLab, Gittea, etc. (maybe latest commits);
 - **Disk Space**: All disks or selected disks (total/free)
 - **CPU Usage**: Percentage, per core, graphs, etc.
 - **Memory Usage**: Current usage along with historical, graph, etc.

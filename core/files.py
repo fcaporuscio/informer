@@ -1,6 +1,7 @@
 """Core functions related to files."""
 
 import hashlib
+import rjsmin
 
 from core.config import *
 from templates import *
@@ -66,6 +67,9 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
           bundled_text += "\n\n\n"
       except Exception as e:
         print(make_bundle_file_error_message(bundle_type, e))
+
+  if bundle_type in ("js", "informerjs"):
+    bundled_text = rjsmin.jsmin(bundled_text)
 
   return bundled_text
 

@@ -126,7 +126,7 @@ The JavaScript should look something like this:
 ```javascript
 /* Your one-liner description */
 
-window.addEventListener('load', (event) => {
+defineInformerWidget(() => {
 
   class WidgetName extends informer.Widget {
     start() {
