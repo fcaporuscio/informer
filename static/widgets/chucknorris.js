@@ -1,11 +1,12 @@
 /* Chuck Norris Widget JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   class ChuckNorris extends informer.Widget {
     start() {
-      this.container = this.node.querySelector(".container");
-      this.quote = this.container.querySelector(".quote");
+      this.setupDomFields([
+        "container", "quote"
+      ]);
     }
 
     receiveData(data) {

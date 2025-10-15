@@ -25,8 +25,6 @@ class ChuckNorris(Widget):
   URL = "https://api.chucknorris.io/jokes/random"
   URL_CATEGORIES = "https://api.chucknorris.io/jokes/categories"
 
-  HAS_REQUESTS_SESSION = True
-
   # We cache the "cateogries" for a year (since these don't change
   # often, maybe never). We store this value in ALTERNATE_CACHE_DURATIONS
   # so that the cache file will be considered valid when attempting to

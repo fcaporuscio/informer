@@ -36,6 +36,9 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
   cfg = Config()
   bundled_text = ""
 
+  #
+  # CSS
+  #
   if bundle_type == "css":
     for filename in bundle_files:
       try:
@@ -44,6 +47,22 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
       except Exception as e:
         print(make_bundle_file_error_message(bundle_type, e))
 
+  #
+  # Informer CSS (main styles)
+  #
+  elif bundle_type == "informercss":
+    for filename in bundle_files:
+      try:
+        with open(f"./templates/styles/{filename}.css") as fp:
+          file_text = fp.read()
+          bundled_text += file_text
+          bundled_text += "\n\n\n"
+      except Exception as e:
+        print(make_bundle_file_error_message(bundle_type, e))
+
+  #
+  # JS
+  #
   elif bundle_type == "js":
     for filename in bundle_files:
       try:
@@ -54,20 +73,13 @@ def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
       except Exception as e:
         print(make_bundle_file_error_message(bundle_type, e))
 
+  #
+  # Informer JS (main JS)
+  #
   elif bundle_type == "informerjs":
     for filename in bundle_files:
       try:
         with open(f"./static/{filename}.js") as fp:
-          file_text = fp.read()
-          bundled_text += file_text
-          bundled_text += "\n\n\n"
-      except Exception as e:
-        print(make_bundle_file_error_message(bundle_type, e))
-
-  elif bundle_type == "informercss":
-    for filename in bundle_files:
-      try:
-        with open(f"./templates/styles/{filename}.css") as fp:
           file_text = fp.read()
           bundled_text += file_text
           bundled_text += "\n\n\n"

@@ -1,6 +1,6 @@
 /* GitHub Widget JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   class GitHub extends informer.Widget {
     start() {

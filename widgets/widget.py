@@ -5,6 +5,7 @@ import logging
 import pendulum
 import requests
 import requests_cache
+import retry_requests
 
 from core.cache import CACHE, InvalidCacheDuration
 from templates import loader_env
@@ -126,7 +127,6 @@ class Params:
 #
 # WidgeBase Class
 #
-
 class WidgetBase:
   """This base class is used to valdate incoming arguments. The __init__
   method should return a boolean where False means we should simply
@@ -150,7 +150,6 @@ class WidgetBase:
 # Widge Class
 # All Widgets should inherit from this class.
 #
-
 class Widget(WidgetBase):
   """Base class. All widgets must inherit from this class. All widgets
   should implement the 'html' property. This is the HTML fragment that
@@ -205,7 +204,7 @@ class Widget(WidgetBase):
   POST_FETCH = False
 
   # Requests and Caching
-  HAS_REQUESTS_SESSION = False
+  HAS_REQUESTS_SESSION = True
   REQUESTS_SESSION_CACHE_TIMEOUT = 60  # Default timeout (gets ignored if widget has a 'cache' param)
 
   # Set to a list of alternate/valid cache durations for this widget if
@@ -435,6 +434,8 @@ class Widget(WidgetBase):
     cache_duration (either the amount of seconds or the cache code, such
     as: 1m, 5m, 1h, 1d, etc.)."""
 
+    session = None
+
     if self.HAS_REQUESTS_SESSION:
       cache_duration = cache_duration or self.params[self.PARAM_CACHE]
       if isinstance(cache_duration, str):
@@ -445,9 +446,14 @@ class Widget(WidgetBase):
       if not isinstance(cache_duration, int):
         cache_duration = self.REQUESTS_SESSION_CACHE_TIMEOUT
 
-      return CACHE.get_requests_session(self, cache_duration)
+      session = CACHE.get_requests_session(self, cache_duration)
     else:
-      return requests
+      session = requests.Session()
+
+    if session is not None:
+      session = retry_requests.retry(session, retries=3, backoff_factor=0.2)
+
+    return session
 
   def elapsed_since(self, dt: pendulum.DateTime) -> str:
     """Returns an approximate elapsed from from NOW, from minutes to

@@ -7,7 +7,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=VT323&display=swap">
-        <link rel="stylesheet" href="/styles.css?h={{ version }}-{{ informerccs_hash }}">
+        <link rel="stylesheet" href="/informer.css?h={{ version }}-{{ informerccs_hash }}">
         <link rel="stylesheet" href="/bundle_{% for filename in style_files|sorted() %}{% if loop.index > 1%},{% endif %}{{ filename }}{% endfor %}.css?h={{ version }}-{{ css_hash }}">
 
         <script type="text/javascript">
@@ -24,11 +24,11 @@
                 });
             });
 
-            window.defineInformerWidget = (fn) => {
+            window.InformerOnLoad = (fn) => {
               // If the DOM is ready, call our function right away,
-                // otherwise only execute it when the window's load
-                // event triggers. This ensures that the 'informer'
-                // instance is available.
+              // otherwise only execute it when the window's load
+              // event triggers. This ensures that the 'informer'
+              // instance is available.
               if(document.readyState == "complete") {
                 fn();
               }
@@ -36,6 +36,8 @@
                 window.addEventListener("load", fn);
               }
             }
+
+            window.defineInformerWidget = window.InformerOnLoad;
         </script>
 
         <script type="text/javascript" src="/bundle_informer.informerjs?h={{ version }}-{{ informerjs_hash }}"></script>

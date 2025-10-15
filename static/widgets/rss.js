@@ -1,12 +1,14 @@
 /* RSS Widget JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   class RSS extends informer.Widget {
     start() {
-      this.rss_name = this.node.querySelector(".rss-name");
-      this.rss_items = this.node.querySelector(".rss-items");
-      this.more_link = this.node.querySelector("a.show-more");
+      this.setupDomFields([
+        ["rss_name", ".rss-name"],
+        ["rss_items", ".rss-items"],
+        ["more_link", "a.show-more"]
+      ]);
 
       this.more_link.addEventListener('click', (event) => {
         event.preventDefault();

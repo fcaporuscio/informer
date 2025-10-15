@@ -10,6 +10,7 @@ import types
 
 from flask import Flask, Response, redirect, request, url_for
 from flask_cors import CORS
+from flask_apscheduler import APScheduler
 
 from core.cache import CACHE
 from core.config import Config
@@ -19,7 +20,7 @@ from templates import loader_env
 from widgets import WIDGETS_BY_TYPE, Widget, WidgetFinder
 
 
-__version__ = "1.0.7"
+__version__ = "1.0.8"
 
 
 CONFIG_FILENAME_DEFAULT = "informer.yml"
@@ -44,7 +45,6 @@ CORS(app)
 #
 # Methods
 #
-
 def main():
   """This is the entry point for the CLI."""
   # Get out parser and parse the user-supplied args (or defaults).
@@ -129,6 +129,7 @@ def main():
   print(f" * Informer v{__version__}")
   print(f" * Config file: {args.config}")
 
+  start_cache_cleanup_scheduler()
   app.run(host=args.host, port=args.port)
 
 
@@ -228,7 +229,6 @@ def get_config_hash(config: dict) -> str:
 #
 # App Routes
 #
-
 @app.route("/", methods=["GET"])
 def get_page():
   """The root will redirect to the first defined page in the config
@@ -271,10 +271,6 @@ def get_named_page(page: str):
   # In case the slug was not defined in the config, we'll set it to the
   # value we are using.
   page_config["slug"] = page
-
-  # Clear expired caches (TODO: move this somewhere cleaner)
-  CACHE.clear_expired()
-
   theme = Config().theme
 
   # Instantiate our Page and return its html.
@@ -282,7 +278,7 @@ def get_named_page(page: str):
   return p.html
 
 
-@app.route("/styles.css", methods=["GET"])
+@app.route("/informer.css", methods=["GET"])
 def get_stylesheet():
   """Returns our main stylesheet CSS. We include 'theme' in the template
   context so that we can use this data in the template."""
@@ -381,15 +377,31 @@ def widget_data(widget_type: str) -> dict:
 
 
 #
+# Cache Cleanup Task
+#
+def cache_cleanup():
+  print("[Task] Cache Cleanup")
+  CACHE.clear_expired()
+
+
+def start_cache_cleanup_scheduler():
+  scheduler = APScheduler()
+  scheduler.add_job(id='Cache Cleaner', func=cache_cleanup, trigger="interval", seconds=10 * 60)
+  scheduler.start()
+
+
+#
 # Signals
 #
-
 def handle_shutdown(signum: int, frame: types.FrameType | None) -> None:
   """A signal has been received and a shutdown is required."""
   print(f"\nReceived signal {signum}. Performing graceful shutdown...")
-  sys.exit(0)  # Exit gracefully
+  sys.exit(0)
 
 
+#
+# Prepare and Start!
+#
 signal.signal(signal.SIGINT, handle_shutdown)
 signal.signal(signal.SIGTERM, handle_shutdown)
 
@@ -400,3 +412,4 @@ if __name__ == '__main__':
 else:
   # WSGI - Setup the config path
   Config(CONFIG_FILEPATH_DEFAULT)
+  start_cache_cleanup_scheduler()

@@ -22,7 +22,7 @@
     }
 
     .elapsed {
-      color: {{ theme.widget_foreground_color }};
+      color: {{ theme.widget_color }};
     }
 
     .feed-title, .elapsed {
@@ -45,7 +45,7 @@
     }
 
     .tag {
-      color: {{ theme.widget_foreground_color }};
+      color: {{ theme.widget_color }};
     }
 
     .img-container {

@@ -35,7 +35,6 @@ class RSS(Widget):
   STYLES = True
   POST_FETCH = True
 
-  HAS_REQUESTS_SESSION = True
   REQUESTS_SESSION_CACHE_TIMEOUT = 600  # ensures a minimum cache of 10 minutes
 
   def init(self):

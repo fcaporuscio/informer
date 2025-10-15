@@ -77,7 +77,11 @@ window.addEventListener('load', (event) => {
 
     /**
      * Sets up fields for the current Widget. The fields_arr is an array
-     * of 2 items: [field_name, querySelector string].
+     * of:
+     *   - [field_name, querySelector string]
+     *   - or string
+     * 
+     * Single strings are treated as ["field_name", ".field_name"]
      * 
      * Example:
      *     setupDomFields([["my_field", ".fields.my-field"]])
@@ -89,7 +93,13 @@ window.addEventListener('load', (event) => {
       const widget = this;
 
       fields_arr.forEach(field_def => {
-        const [field_name, qs] = field_def;
+        if(Array.isArray(field_def)) {
+          var [field_name, qs] = field_def;
+        }
+        else {
+          var field_name = field_def;
+          var qs = `.${field_def}`;
+        }
 
         if(widget[field_name] !== undefined) {
           console.error(`setupDomFields: cannot assign '${field_name}' to widget since this field already exists`);

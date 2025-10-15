@@ -33,7 +33,6 @@ class SiteStatus(Widget):
   POST_FETCH = True
 
   STATUS_OK = 200
-  HAS_REQUESTS_SESSION = True
 
   def init(self):
     """Validate required arguments."""

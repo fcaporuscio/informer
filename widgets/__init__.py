@@ -6,7 +6,12 @@ __all__ = ["load_widget", "WidgetFinder"]
 
 # Import the base Widget class and all other valid widgets here. They
 # are only considered valid widgets if they are imported here.
-from .widget import Widget
+from .widget import (
+  Widget,
+  WidgetArgumentException,
+  WidgetArgumentValueException,
+  WidgetInitException
+)
 from .chucknorris import *
 from .date import *
 from .garfield import *

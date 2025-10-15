@@ -36,8 +36,6 @@ class Gitea(Widget):
   POST_FETCH = True
   URI_BASE = "/api/v1/repos"
 
-  HAS_REQUESTS_SESSION = True
-
   CONTENT_TEMPLATE = "widgets/gitea_body.html"
 
   def init(self):

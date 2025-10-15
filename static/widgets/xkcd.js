@@ -1,6 +1,6 @@
 /* xkcd Widget JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   informer.requireWidget("Garfield", () => {
     class xkcd extends informer.widgetClasses.Garfield {};

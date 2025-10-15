@@ -40,7 +40,6 @@ class OpenMeteo(Widget):
   POST_FETCH = True
   URL_FORECAST = "https://api.open-meteo.com/v1/forecast"
 
-  HAS_REQUESTS_SESSION = True
   REQUESTS_SESSION_CACHE_TIMEOUT = 3600
 
   def init(self):

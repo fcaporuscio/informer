@@ -1,4 +1,17 @@
 .widget-github, .widget.github {
+  .repository-name {
+    color: {{ theme.section_color }};
+
+    &:empty {
+      display: none;
+    }
+
+    &::before {
+      content: "\a0/\a0";
+      color: {{ theme.widget_border_color }};
+    }
+  }
+
   .item {
     color: {{ theme.section_active_color }};
     margin-bottom: .5rem;
@@ -67,7 +80,7 @@
     }
 
     .by {
-      color: {{ theme.widget_foreground_color }};
+      color: {{ theme.widget_color }};
     }
 
   }

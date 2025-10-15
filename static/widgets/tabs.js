@@ -1,6 +1,6 @@
 /* Tabs Widget JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   class Tabs {
     constructor(informer) {

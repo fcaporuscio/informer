@@ -1,10 +1,13 @@
 /* Site Status JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   class SiteStatus extends informer.Widget {
     start() {
-      this.content = this.node.querySelector(".sitestatus-content");
+      this.setupDomFields([
+        ["content", ".sitestatus-content"]
+      ]);
+
       this.setRefreshInterval(1 * 60);
     }
 

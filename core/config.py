@@ -145,7 +145,7 @@ class Config:
       # Widgets
       "widget_colored_header": False,
       "widget_background_color": "#292931",
-      "widget_foreground_color": "#999999",
+      "widget_color": "#999999",
       "widget_border_color": "#323232",
 
       # Misc.

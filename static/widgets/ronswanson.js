@@ -1,11 +1,12 @@
 /* Ron Swanson Widget JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   class RonSwanson extends informer.Widget {
     start() {
-      this.container = this.node.querySelector(".container");
-      this.quote = this.container.querySelector(".quote");
+      this.setupDomFields([
+        "container", "quote"
+      ]);
     }
 
     receiveData(data) {

@@ -25,7 +25,6 @@ class xkcd(Widget):
   POST_FETCH = True
 
   WIDGET_CLASS_NAME = "comic"
-  HAS_REQUESTS_SESSION = True
   REQUEST_SESSION_TIMEOUT = 3600  # ensures a minimum cache of 1 hour
 
   def fetch_data(self):

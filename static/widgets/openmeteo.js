@@ -1,14 +1,17 @@
 /* Open-Meteo Widget JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   class OpenMeteo extends informer.Widget {
     start() {
       this.chart = null;
-      this.current_temperature = this.node.querySelector(".current-temperature");
-      this.relative_humidity = this.node.querySelector(".relhum");
-      this.precip_current = this.node.querySelector(".precipitation-current");
-      this.precip_next = this.node.querySelector(".precipitation-upcoming");
+      this.setupDomFields([
+        ["current_temperature", ".current-temperature"],
+        ["relative_humidity", ".relhum"],
+        ["precip_current", ".precipitation-current"],
+        ["precip_next", ".precipitation-upcoming"]
+      ]);
+
       this.setRefreshInterval(2 * 60);
     }
 

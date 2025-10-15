@@ -34,8 +34,6 @@ class GitHub(Widget):
   POST_FETCH = True
   URL_BASE = "https://api.github.com/repos"
 
-  HAS_REQUESTS_SESSION = True
-
   CONTENT_TEMPLATE = "widgets/github_body.html"
 
   def init(self):

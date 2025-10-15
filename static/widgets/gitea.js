@@ -1,6 +1,6 @@
 /* Gitea Widget JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   informer.requireWidget("GitHub", () => {
     class Gitea extends informer.widgetClasses.GitHub {};

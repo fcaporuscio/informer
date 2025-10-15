@@ -19,6 +19,7 @@ new widgets up and running.
 
 - [feedparser](https://pypi.org/project/feedparser/)
 - [Flask](https://pypi.org/project/Flask/)
+- [Flask-APScheduler](https://pypi.org/project/Flask-APScheduler/)
 - [Flask-Cors](https://pypi.org/project/flask-cors/)
 - [Jinja2](https://pypi.org/project/Jinja2/)
 - [pendulum](https://pypi.org/project/pendulum/)
@@ -325,7 +326,7 @@ theme:
   - link_color: "#ffffff"
   - widget_colored_header: false
   - widget_background_color: "#202020"
-  - widget_foreground_color: lightgray
+  - widget_color: lightgray
   - widget_border_color: "#323232"
   - success_color: "#3f8f75"
   - failure_color: "#c24f3f"
@@ -343,14 +344,3 @@ Here are some widget ideas:
 - **Disk Space**: All disks or selected disks (total/free)
 - **CPU Usage**: Percentage, per core, graphs, etc.
 - **Memory Usage**: Current usage along with historical, graph, etc.
-
----
-
-# Widgets with Known Issues
-
-Some widgets are known to have issues that will need to be addressed:
-- **rss**: requests.get() is used to fetch the XML data, but some feeds
-timeout (it works in a browser, though) -- I must be missing some headers!
-- **date**: For alternate timezones, only the offset details are used in
-JS so it will be inacurate during time changes (as "wide" as the time
-difference is).

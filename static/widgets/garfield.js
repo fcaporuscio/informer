@@ -1,14 +1,16 @@
 /* Garfield Widget JS */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   class Garfield extends informer.Widget {
     start() {
       this.formatter = new informer.DateFormatter();
-      this.image_container = this.node.querySelector(".img-container");
-      this.image = this.node.querySelector("img.image");
-      this.date = this.node.querySelector(".date");
-      this.back_button = this.node.querySelector("button");
+      this.setupDomFields([
+        "date",
+        ["image_container", ".img-container"],
+        ["image", "img.image"],
+        ["back_button", "button"]
+      ]);
 
       this.image.addEventListener("click", (event) => {
         if(this.image.width + 10 > this.image_container.clientWidth) {

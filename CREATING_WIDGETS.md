@@ -45,7 +45,6 @@ class MyNewWidget(Widget):
 
   # If you want to use caching for the web_fetch() method (described
   # later) you need to set this flag:
-  HAS_REQUESTS_SESSION = True
   REQUEST_SESSION_TIMEOUT = 3600  # generic value, overwritten by the cache argument.
 
   # Define the arguments
@@ -126,7 +125,7 @@ The JavaScript should look something like this:
 ```javascript
 /* Your one-liner description */
 
-defineInformerWidget(() => {
+InformerOnLoad(() => {
 
   class WidgetName extends informer.Widget {
     start() {
