@@ -26,12 +26,12 @@ new widgets up and running.
 - [PyYAML](https://pypi.org/project/PyYAML/)
 - [requests](https://pypi.org/project/requests/)
 - [requests-cache](https://pypi.org/project/requests-cache/)
+- [retry-requests](https://pypi.org/project/retry-requests/)
 - [rjsmin](https://pypi.org/project/rjsmin/)
 
 **Open-Meteo Requirements**
 
 - [openmeteo-requests](https://pypi.org/project/openmeteo-requests/)
-- [retry-requests](https://pypi.org/project/retry-requests/)
 - [numpy](https://pypi.org/project/numpy/)
 - [pandas](https://pypi.org/project/pandas/)
 
