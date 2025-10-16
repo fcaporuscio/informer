@@ -51,13 +51,6 @@ class MyNewWidget(Widget):
   ARGUMENTS = Widget.MAKE_ARGUMENTS(...)
 ```
 
-In order to make your widget available, you must import it in the
-*\_\_init\_\_.py* file:
-
-```python
-from .mynewwidget import MyNewWidget
-```
-
 ### The **ARGUMENTS** definition
 
 Widget.MAKE\_ARGUMENTS takes 3 arguments:
@@ -118,6 +111,15 @@ will, in turn, be sent back as JSON data.
     return { "my_content_data": "Widgets make me happy!" }
 ```
 
+### Making the Widget Available
+
+In order to make your widget available, you must import it in the
+*\_\_init\_\_.py* file:
+
+```python
+from .mynewwidget import MyNewWidget
+```
+
 ## JS Code
 
 The JavaScript should look something like this:
@@ -130,7 +132,11 @@ InformerOnLoad(() => {
   class WidgetName extends informer.Widget {
     start() {
       // Grab the DOM nodes required when updating this widget
-      this.content = this.node.querySelector(".widgetname-content");
+      this.setupDomFields([
+        ["content", ".widget-content"]
+      ]);
+      // This is a shortcut for:
+      //    this.content = this.node.querySelector(".widget-content");
     }
 
     receiveData(data) {
