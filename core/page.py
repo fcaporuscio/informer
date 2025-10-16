@@ -1,7 +1,7 @@
 """Page is the core Class that creates the HTML page by combining the
 styles, css, javascript to load along with the widget HTML fragments."""
 
-from core.files import get_bundle_hash
+from core.files import BUNDLER
 from templates import loader_env
 from widgets import WidgetFinder
 
@@ -101,19 +101,19 @@ class Page:
   @property
   def css_hash(self):
     filenames = sorted(self.style_files)
-    return get_bundle_hash(filenames, "css")
+    return BUNDLER.get_bundle_hash(filenames, "css")
 
   @property
   def js_hash(self):
     filenames = sorted(self.script_files)
-    return get_bundle_hash(filenames, "js")
+    return BUNDLER.get_bundle_hash(filenames, "js")
 
   @property
   def informercss_hash(self):
     filenames = ["informer"]
-    return get_bundle_hash(filenames, "informercss")
+    return BUNDLER.get_bundle_hash(filenames, "informercss")
 
   @property
   def informerjs_hash(self):
     filenames = ["informer"]
-    return get_bundle_hash(filenames, "informerjs")
+    return BUNDLER.get_bundle_hash(filenames, "informerjs")

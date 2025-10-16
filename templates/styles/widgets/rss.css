@@ -135,7 +135,7 @@
           }
 
           &::after {
-            content: "\a0Less";
+            content: "\a0Less\a0";
           }
         }
       }
@@ -147,19 +147,31 @@
       }
     }
 
-    a.show-more {
-      display: none;
-      text-align: right;
-      text-transform: uppercase;
-      font-weight: 300;
-
+    a {
       &:link, &:visited {
-        color: {{ theme.section_active_color }};
+        &:focus-visible {
+          outline-offset: 3px;
+          outline-color: {{ theme.accent_color }};
+          background-color: {{ theme.widget_border_color }};
+          color: {{ theme.section_active_color }};
+          border-radius: 3px;
+        }
       }
 
-      &:hover {
-        color: {{ theme.section_active_color }};
-        text-decoration: none;
+      &.show-more {
+        display: none;
+        text-align: right;
+        text-transform: uppercase;
+        font-weight: 300;
+
+        &:link, &:visited {
+          color: {{ theme.section_active_color }};
+        }
+
+        &:hover {
+          color: {{ theme.section_active_color }};
+          text-decoration: none;
+        }
       }
     }
 
@@ -173,10 +185,11 @@
         }
 
         &::after {
-          content: "\a0More";
+          content: "\a0More\a0";
         }
       }
     }
+
   }
 }
 

@@ -17,6 +17,7 @@ new widgets up and running.
 
 **Core**
 
+- [cssminifier](https://pypi.org/project/cssminifier/)
 - [feedparser](https://pypi.org/project/feedparser/)
 - [Flask](https://pypi.org/project/Flask/)
 - [Flask-APScheduler](https://pypi.org/project/Flask-APScheduler/)

@@ -6,7 +6,15 @@ import yaml
 from templates.loader import get_hex_color, page_name
 
 
-__all__ = ["Config"]
+__all__ = ["Config", "ConfigLoadException"]
+
+
+#
+# Exceptions
+#
+class ConfigLoadException(Exception):
+  """Error loading the config file (does not parse, etc)."""
+  pass
 
 
 #
@@ -49,8 +57,8 @@ class Config:
         setattr(self, "_load_data", load_data)
         return load_data
     except Exception as e:
-      print(f"Error parsing the config file: {str(e)}")
-    return None
+      raise ConfigLoadException(f"Error parsing the config file: <pre>{str(e)}</pre>") from e
+    # return None
 
   def _sanitize(self, config: dict):
     """Ensures each page has a slug definition and that hidden pages

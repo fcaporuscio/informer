@@ -39,6 +39,10 @@ html, body {
     }
   }
 
+  .w100 {
+    width: 100%;
+  }
+
   .tac { text-align: center; }
   .tar { text-align: right }
   
@@ -229,7 +233,8 @@ html, body {
       text-underline-offset: 4px;
     }
 
-    &:focus-visible {}
+    &:focus-visible {
+    }
   }
 }
 
@@ -269,6 +274,10 @@ html, body {
     &.widget-box, .widget-box {
       & > * {
         opacity: 1;
+
+        .loader {
+          opacity: .1;
+        }
       }
     }
   }
@@ -316,6 +325,7 @@ html, body {
       border: 0;
       padding: 0;
       background-color: transparent;
+      overflow: visible;
     }
 
     + .widget {
@@ -498,6 +508,10 @@ html, body {
   margin: 0 auto;
   animation: rotation 1s linear infinite;
   overflow: hidden;
+
+  & > * {
+    visibility: hidden;
+  }
 
   &::after {
     content: '';  

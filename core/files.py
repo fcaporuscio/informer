@@ -3,95 +3,112 @@
 import hashlib
 
 from core.config import Config
+from optionals import jsmin, CSSMinifier
 from templates import loader_env
 
 
-try:
-  from rjsmin import jsmin
-except ModuleNotFoundError:
-  def jsmin(s):
-    return s
+__all__ = ["BUNDLER"]
 
 
-__all__ = ["get_bundle_hash", "load_bundle_contents"]
+class Bundler:
+  def __init__(self):
+    pass
 
+  def get_bundle_hash(self, bundle_files: list, bundle_type: str) -> str:
+    """Returns the md5 hash for the file bundle."""
 
-def get_bundle_hash(bundle_files: list, bundle_type: str) -> str:
-  """Returns the md5 hash for the file bundle."""
+    bundled_text = self.load_bundle_contents(bundle_files, bundle_type)
+    md5 = hashlib.md5(b"Informer")
+    md5.update(bundled_text.encode())
+    return md5.hexdigest()
 
-  bundled_text = load_bundle_contents(bundle_files, bundle_type)
-  md5 = hashlib.md5(b"Informer")
-  md5.update(bundled_text.encode())
-  return md5.hexdigest()
+  def load_bundle_contents(self, bundle_files: list, bundle_type: str) -> str:
+    """Load the contents of the bundle and return is as a single string."""
 
+    if isinstance(bundle_files, str):
+      bundle_files = sorted(bundle_files.split(","))
+    if not isinstance(bundle_files, list):
+      return ""
 
-def load_bundle_contents(bundle_files: list, bundle_type: str) -> str:
-  """Load the contents of the bundle and return is as a single string."""
+    cfg = Config()
+    bundled_text = ""
 
-  if isinstance(bundle_files, str):
-    bundle_files = sorted(bundle_files.split(","))
-  if not isinstance(bundle_files, list):
-    return ""
+    #
+    # CSS
+    #
+    if bundle_type == "css":
+      for filename in bundle_files:
+        try:
+          template = loader_env.get_template(f"styles/widgets/{filename}.css")
+          bundled_text += f"/* {filename} */\n\n" + \
+              template.render({ "theme": cfg.theme, "settings": cfg.global_settings }) + \
+              "\n\n\n"
+        except Exception as e:
+          print(self._make_bundle_file_error_message(bundle_type, e))
 
-  cfg = Config()
-  bundled_text = ""
+    #
+    # Informer CSS (main styles)
+    #
+    elif bundle_type == "informercss":
+      for filename in bundle_files:
+        try:
+          template = loader_env.get_template(f"styles/informer.css")
+          bundled_text += f"/* informer.css */\n\n" + \
+              template.render({ "theme": cfg.theme, "settings": cfg.global_settings }) + \
+              "\n\n\n"
+        except Exception as e:
+          print(self._make_bundle_file_error_message(bundle_type, e))
 
-  #
-  # CSS
-  #
-  if bundle_type == "css":
-    for filename in bundle_files:
+    #
+    # JS
+    #
+    elif bundle_type == "js":
+      for filename in bundle_files:
+        try:
+          with open(f"./static/widgets/{filename}.js") as fp:
+            file_text = fp.read()
+            bundled_text += file_text
+            bundled_text += "\n\n\n"
+        except Exception as e:
+          print(self._make_bundle_file_error_message(bundle_type, e))
+
+    #
+    # Informer JS (main JS)
+    #
+    elif bundle_type == "informerjs":
+      for filename in bundle_files:
+        try:
+          with open(f"./static/{filename}.js") as fp:
+            file_text = fp.read()
+            bundled_text += file_text
+            bundled_text += "\n\n\n"
+        except Exception as e:
+          print(self._make_bundle_file_error_message(bundle_type, e))
+
+    return self._minify_bundle(bundled_text, bundle_type)
+
+  def _minify_bundle(self, bundled_text: str, bundle_type: str):
+    """Minify CSS or JS, depending on the bundle_type. Leave as is if the
+    bundle type is not recognized."""
+
+    if not isinstance(bundled_text, str):
+      bundled_text = str(bundled_text)
+
+    if bundle_type in ("js", "informerjs"):
+      bundled_text = jsmin(bundled_text)
+    elif bundle_type in ("css", "informercss"):
       try:
-        template = loader_env.get_template(f"styles/widgets/{filename}.css")
-        bundled_text += f"/* {filename} */\n\n" + template.render({ "theme": cfg.theme }) + "\n\n\n"
+        bundled_text = CSSMinifier(bundled_text)()
       except Exception as e:
-        print(make_bundle_file_error_message(bundle_type, e))
+        print(f"Could not minify the CSS: {str(e)}")
+    return bundled_text.strip()
 
-  #
-  # Informer CSS (main styles)
-  #
-  elif bundle_type == "informercss":
-    for filename in bundle_files:
-      try:
-        with open(f"./templates/styles/{filename}.css") as fp:
-          file_text = fp.read()
-          bundled_text += file_text
-          bundled_text += "\n\n\n"
-      except Exception as e:
-        print(make_bundle_file_error_message(bundle_type, e))
-
-  #
-  # JS
-  #
-  elif bundle_type == "js":
-    for filename in bundle_files:
-      try:
-        with open(f"./static/widgets/{filename}.js") as fp:
-          file_text = fp.read()
-          bundled_text += file_text
-          bundled_text += "\n\n\n"
-      except Exception as e:
-        print(make_bundle_file_error_message(bundle_type, e))
-
-  #
-  # Informer JS (main JS)
-  #
-  elif bundle_type == "informerjs":
-    for filename in bundle_files:
-      try:
-        with open(f"./static/{filename}.js") as fp:
-          file_text = fp.read()
-          bundled_text += file_text
-          bundled_text += "\n\n\n"
-      except Exception as e:
-        print(make_bundle_file_error_message(bundle_type, e))
-
-  if bundle_type in ("js", "informerjs"):
-    bundled_text = jsmin(bundled_text)
-
-  return bundled_text
+  def _make_bundle_file_error_message(self, bundle_type: str, error: Exception):
+    """Returns a string showing the error."""
+    return f"Unable to load {bundle_type} file: {str(error)}"
 
 
-def make_bundle_file_error_message(bundle_type: str, error: Exception):
-  """Returns a string showing the error."""
-  return f"Unable to load {bundle_type} file: {str(error)}"
+#
+# Create the Bundler
+#
+BUNDLER = Bundler()

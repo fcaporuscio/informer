@@ -13,8 +13,8 @@ from flask_cors import CORS
 from flask_apscheduler import APScheduler
 
 from core.cache import CACHE
-from core.config import Config
-from core.files import load_bundle_contents
+from core.config import Config, ConfigLoadException
+from core.files import BUNDLER
 from core.page import Page
 from templates import loader_env
 from widgets import WIDGETS_BY_TYPE, Widget, WidgetFinder
@@ -186,7 +186,15 @@ def handle_cache_command(args: argparse.Namespace) -> None:
 
     # Load the config and determine all the widget types + duration
     # combinations
-    config = Config().load()
+
+    try:
+      config = Config().load()
+    except ConfigLoadException as e:
+      error = str(e)
+      error = error.replace("<pre>", "").replace("</pre>", "")
+      print(error)
+      return
+
     pages = config.get("pages")
     all_widgets = []
     for page in pages:
@@ -234,7 +242,10 @@ def get_page():
   """The root will redirect to the first defined page in the config
   file."""
 
-  config = Config().load()
+  try:
+    config = Config().load()
+  except ConfigLoadException as e:
+    return f"<h4>{str(e)}</h4>", 500
 
   # Find the first defined page and redirect to it.
   pages = config.get("pages")
@@ -253,7 +264,11 @@ def get_named_page(page: str):
   user_agent = request.headers.get("User-Agent")
   Widget.USER_AGENT = user_agent
 
-  config = Config().load()
+  try:
+    config = Config().load()
+  except ConfigLoadException as e:
+    return f"<h4>{str(e)}</h4>", 500
+
   config_hash = get_config_hash(config)
 
   # Find the config for the desired page and instantiate the Page()
@@ -283,22 +298,15 @@ def get_stylesheet():
   """Returns our main stylesheet CSS. We include 'theme' in the template
   context so that we can use this data in the template."""
 
-  cfg = Config()
-  template = loader_env.get_template("styles/informer.css")
-  response = Response(template.render({ "theme": cfg.theme, "settings": cfg.global_settings }))
-  response.headers["Content-Type"] = "text/css"
-  response.headers["Cache-Control"] = CACHE_CONTROL
-  response.headers["Pragma"] = "no-cache"
-  response.headers["Expires"] = "0"
-
-  return response
+  with app.test_client() as client:
+    return client.get("/bundle_informercss.informercss")
 
 
 @app.route("/bundle_<bundle_files>.<bundle_type>", methods=["GET"])
 def bundler(bundle_files, bundle_type):
   """CSS/JS bundler."""
 
-  bundled_text = load_bundle_contents(bundle_files, bundle_type)
+  bundled_text = BUNDLER.load_bundle_contents(bundle_files, bundle_type)
   response = Response(bundled_text)
   response.headers["Content-Type"] = "text/javascript" if bundle_type in ("js", "informerjs") else "text/css"
   response.headers["Cache-Control"] = CACHE_CONTROL
