@@ -205,7 +205,7 @@ class Widget(WidgetBase):
 
   # Requests and Caching
   HAS_REQUESTS_SESSION = True
-  REQUESTS_SESSION_CACHE_TIMEOUT = 60  # Default timeout (gets ignored if widget has a 'cache' param)
+  REQUESTS_SESSION_CACHE_TIMEOUT = 3600  # Default timeout (gets ignored if widget has a 'cache' param)
 
   # Set to a list of alternate/valid cache durations for this widget if
   # the widget requires a secondary request cache that does not follow

@@ -43,10 +43,6 @@ class MyNewWidget(Widget):
   # the page is rendered.
   POST_FETCH = True
 
-  # If you want to use caching for the web_fetch() method (described
-  # later) you need to set this flag:
-  REQUEST_SESSION_TIMEOUT = 3600  # generic value, overwritten by the cache argument.
-
   # Define the arguments
   ARGUMENTS = Widget.MAKE_ARGUMENTS(...)
 ```

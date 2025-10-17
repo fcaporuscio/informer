@@ -35,7 +35,7 @@ class RSS(Widget):
   STYLES = True
   POST_FETCH = True
 
-  REQUESTS_SESSION_CACHE_TIMEOUT = 600  # ensures a minimum cache of 10 minutes
+  IMG_ASPECT_RATIO_CLASSNAME = "auto"
 
   def init(self):
     """Validate that we have a sane parameters."""

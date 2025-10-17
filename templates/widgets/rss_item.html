@@ -1,7 +1,7 @@
 <div class="rss-container{% if not shown %} show-on-full{% endif %}">
     {% if img_url %}
         <div class="img-container{% if params.imagesmall %} img-small{% endif %}">
-            {% if link %}<a href="{{ link }}" target="_blank" tabindex="-1">{% endif %}
+            {% if link %}<a href="{{ link }}" target="_blank" tabindex="-1" class="img-link">{% endif %}
             <img src="{{ img_url }}" />
             {% if link %}</a>{% endif %}
         </div>

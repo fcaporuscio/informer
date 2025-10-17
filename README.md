@@ -335,6 +335,22 @@ theme:
 
 ---
 
+# Widget-Specific Help
+
+Some Widgets require specific parameters to function. This section
+describes such items.
+
+## YouTube Widget
+
+The **YouTube Widget** required the "*channel_id*" parameter. Here is how
+you can obtain the channel ID.
+
+Go to the channel (on YouTube) and:
+- click on "**...more**" in the description to view the popup containing all the channel details;
+- click on "**Share**" at the bottom of the popup;
+- click on "**Copy channel ID**" (the ID that gets copied is what is
+needed for the "channel_id" parameter)
+
 # Contributions
 
 You have an idea? Great! Make it come to life via a widget!

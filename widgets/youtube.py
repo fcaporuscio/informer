@@ -19,6 +19,7 @@ class YouTube(RSS):
 
   CLASSNAME = "rss"
   YOUTUBE_FEED_URL = "https://www.youtube.com/feeds/videos.xml"
+  IMG_ASPECT_RATIO_CLASSNAME = "sixteen-nine"
 
   def init(self):
     """Validate that we have a sane parameters."""
