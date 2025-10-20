@@ -9,6 +9,7 @@ import sys
 import types
 
 from flask import Flask, Response, redirect, request, url_for
+from flask_compress import Compress
 from flask_cors import CORS
 from flask_apscheduler import APScheduler
 
@@ -39,6 +40,7 @@ CACHE_CONTROL = "public, max-age=31536000, immutable"
 
 # Create the Flask App and setup CORS.
 app = Flask(__name__)
+Compress(app)
 CORS(app)
 
 

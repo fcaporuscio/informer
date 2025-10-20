@@ -21,6 +21,7 @@ new widgets up and running.
 - [feedparser](https://pypi.org/project/feedparser/)
 - [Flask](https://pypi.org/project/Flask/)
 - [Flask-APScheduler](https://pypi.org/project/Flask-APScheduler/)
+- [Flask-Compress](https://pypi.org/project/Flask-Compress/)
 - [Flask-Cors](https://pypi.org/project/flask-cors/)
 - [Jinja2](https://pypi.org/project/Jinja2/)
 - [pendulum](https://pypi.org/project/pendulum/)
