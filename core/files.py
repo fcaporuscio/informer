@@ -11,6 +11,8 @@ __all__ = ["BUNDLER"]
 
 
 class Bundler:
+  """Class used for bundling CSS and JS files."""
+
   def __init__(self):
     pass
 

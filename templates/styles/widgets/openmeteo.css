@@ -1,12 +1,14 @@
 .widget-openmeteo {
+  & > .widget-box {
+    padding-bottom: .4rem;
+  }
+
   .current, .precipitation {
     width: 100%;
     padding: 0 0 .5rem;
   }
 
-  .precipitation {
-    border-bottom: 1px solid {{ theme.widget_border_color }};
-  }
+  .precipitation {}
 
   .current-temperature, .relhum, .precipitation-current, .precipitation-upcoming {
     &::before {

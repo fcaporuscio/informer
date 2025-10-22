@@ -3,7 +3,6 @@ name = "informer"
 dynamic = ["version"]
 requires-python = ">=3.11"
 dependencies = [
-    "cssminifier>=0.0.3",
     "feedparser>=6.0.12",
     "flask>=3.1.2",
     "flask-apscheduler>=1.13.1",
@@ -26,6 +25,10 @@ openmeteo = [
 
 jsmin = [
     "rjsmin>=1.2.4",
+]
+
+cssmin = [
+    "cssminifier>=0.0.3",
 ]
 
 [tool.uv]

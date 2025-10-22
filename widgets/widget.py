@@ -132,7 +132,7 @@ class WidgetBase:
   method should return a boolean where False means we should simply
   instantiate the object, with no init code,"""
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, *args, **kwargs) -> bool:
     """Initialize our object and respect the arguments supplied.
 
     Known kwargs:
@@ -283,7 +283,7 @@ class Widget(WidgetBase):
     return self.CLASSNAME or self.cname
 
   @property
-  def cache_widget_type(self):
+  def cache_widget_type(self) -> str:
     """Returns the Widget type to be used when caching."""
     return self.classname.lower()
 
@@ -295,7 +295,11 @@ class Widget(WidgetBase):
     loadedCls = "loaded" if not self.POST_FETCH else ""
     alternateCls = f" {self.WIDGET_CLASS_NAME}" if self.WIDGET_CLASS_NAME else ""
 
-    return f"widget widget-{self.classname.lower()} {self.uniqueclass} {loadedCls}{alternateCls}".strip()
+    widget_class = f"widget-{self.classname.lower()}"
+    if self.classname != self.cname:
+      widget_class = f"{widget_class} widget-{self.cname.lower()}"
+
+    return f"widget {widget_class} {self.uniqueclass} {loadedCls}{alternateCls}".strip()
 
   @property
   def uniqueclass(self) -> str:

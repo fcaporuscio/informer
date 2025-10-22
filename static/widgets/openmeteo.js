@@ -190,15 +190,17 @@ InformerOnLoad(() => {
           title: { display: false, text: 'Daily' },
           grid: { color: informer.theme.widget_border_color },
           ticks: {
+            color: informer.theme.section_color,
             callback: function(value, index, values) {
               const prefix = day_names != null && day_names.length > index ? day_names[index] + " " : "";
               const date = luxon.DateTime.fromMillis(value);
               const day = parseInt(date.toFormat('d'));
+              const suffix = " \u21fe";
 
               if(index === 0 || day === 1) {
-                return prefix + date.toFormat("MMM d")
+                return prefix + date.toFormat("MMM d") + suffix;
               }
-              return prefix + date.toFormat("d");
+              return prefix + date.toFormat("d") + suffix;
             }
           }
         },
@@ -212,8 +214,9 @@ InformerOnLoad(() => {
             tooltipFormat: "MMM d, h:mm a",
           },
           title: { display: false, text: 'Hourly' },
-          grid: { color: informer.theme.widget_border_color },
+          grid: { color: informer.theme.section_active_color + "1f" },
           ticks: {
+            color: informer.theme.section_color,
             callback: function(value, index, ticks) {
                const date = luxon.DateTime.fromMillis(value);
                return date.toFormat('ha').toLowerCase();
@@ -228,8 +231,9 @@ InformerOnLoad(() => {
             display: false,
             text: 'Temperature'
           },
-          grid: { color: informer.theme.widget_border_color },
+          grid: { color: informer.theme.section_active_color + "1f" },
           ticks: {
+            color: informer.theme.accent_color,
             callback: function(value, index, ticks) {
               return value + units;
             }
@@ -239,10 +243,15 @@ InformerOnLoad(() => {
         'y-precip': {
           type: "linear",
           position: "right",
-          title: { display: true, text: "Precipitation (" + precipitation_units + ")" },
+          title: {
+            display: true,
+            text: "Precipitation (" + precipitation_units + ")",
+            color: informer.theme.section_active_color
+          },
           min: 0,
           grid: { drawOnChartArea: false },
           ticks: {
+            color: informer.theme.section_active_color,
             callback: function(value, index, ticks) {
               const suffix = ""; //precipitation_units;
               var v = value;
@@ -273,7 +282,11 @@ InformerOnLoad(() => {
         plugins: {
           title: {
             display: true,
-            text: num_days == 1 ? "Today's Forcast" : `${num_days}-day Forecast`
+            text: num_days == 1 ? "Today's Forcast" : `${num_days}-day Forecast`,
+            color: informer.theme.section_active_color,
+            font: {
+              size: 18
+            }
           },
           legend: {
             display: true,

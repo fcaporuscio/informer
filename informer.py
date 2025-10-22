@@ -242,7 +242,8 @@ def get_config_hash(config: dict) -> str:
 @app.route("/", methods=["GET"])
 def get_page():
   """The root will redirect to the first defined page in the config
-  file."""
+  file. If we don't have any pages defined, we will return HTML (text)
+  stating that no pages are defined."""
 
   try:
     config = Config().load()
@@ -260,7 +261,7 @@ def get_page():
 
 
 @app.route("/<page>", methods=["GET"])
-def get_named_page(page: str):
+def get_named_page(page: str) -> str:
   """Will load the config information for this specific page."""
 
   user_agent = request.headers.get("User-Agent")
@@ -296,7 +297,7 @@ def get_named_page(page: str):
 
 
 @app.route("/informer.css", methods=["GET"])
-def get_stylesheet():
+def get_stylesheet() -> str:
   """Returns our main stylesheet CSS. We include 'theme' in the template
   context so that we can use this data in the template."""
 
@@ -305,7 +306,7 @@ def get_stylesheet():
 
 
 @app.route("/bundle_<bundle_files>.<bundle_type>", methods=["GET"])
-def bundler(bundle_files, bundle_type):
+def bundler(bundle_files, bundle_type) -> Response:
   """CSS/JS bundler."""
 
   bundled_text = BUNDLER.load_bundle_contents(bundle_files, bundle_type)
@@ -319,7 +320,7 @@ def bundler(bundle_files, bundle_type):
 
 
 @app.route("/styles/widgets/<custom_css>", methods=["GET"])
-def get_custom_stylesheet(custom_css: str):
+def get_custom_stylesheet(custom_css: str) -> Response:
   """Returns the CSS that is used by a widget. We include 'theme' in the
   template context so that we can use this data in the template."""
 
@@ -389,12 +390,12 @@ def widget_data(widget_type: str) -> dict:
 #
 # Cache Cleanup Task
 #
-def cache_cleanup():
+def cache_cleanup() -> None:
   print("[Task] Cache Cleanup")
   CACHE.clear_expired()
 
 
-def start_cache_cleanup_scheduler():
+def start_cache_cleanup_scheduler() -> None:
   scheduler = APScheduler()
   scheduler.add_job(id='Cache Cleaner', func=cache_cleanup, trigger="interval", seconds=10 * 60)
   scheduler.start()

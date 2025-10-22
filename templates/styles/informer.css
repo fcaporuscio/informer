@@ -335,7 +335,7 @@ html, body {
   }
 
   &.widget-box, .widget-box {
-    padding: 1rem;
+    padding: 1rem .94rem;
     border: 1px solid {{ theme.widget_border_color}};
     background-color: {{ theme.widget_background_color|hex_color_alpha(150) }};
     background-image: linear-gradient(-80deg, {{ theme.widget_border_color|hex_color_alpha(70) }} 0, {{ theme.widget_background_color }} 40px, {{ theme.widget_background_color }} 100%);
@@ -563,6 +563,20 @@ html, body {
         max-width: 100vw;
         width: 100%;
         flex-grow: 1;
+      }
+    }
+
+    .widget {
+      &.widget-box, .widget-box {
+        padding: .5rem .45rem;
+        /*border-radius: 0;*/
+        border-width: 1px 0 0 0;
+        background-color: transparent;
+      }
+
+      .widget-header {
+        padding: 0;
+        margin: 0 0 .25rem;
       }
     }
   }

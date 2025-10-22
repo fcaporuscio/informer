@@ -1,4 +1,3 @@
-
 """Widget: Ron Swanson."""
 
 from .widget import Widget, WidgetFetchDataException
