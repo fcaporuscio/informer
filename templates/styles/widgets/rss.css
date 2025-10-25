@@ -76,7 +76,7 @@
   img {
     width: 100%;
     border-radius: 4px;
-    border: 1px solid {{ theme.widget_border_color|hex_color_alpha(10) }};
+    border: 1px solid {{ theme.widget_border_color|hex_color_alpha(40) }};
   }
 
   .widget-box {
@@ -163,7 +163,7 @@
       &.has-more {
         .show-more {
           &::before {
-            content: "\25b4\a0";
+            content: "\2796\a0";
             font-size: 1rem;
           }
 
@@ -211,9 +211,10 @@
     &.has-more {
       .show-more {
         display: inline-block;
+        font-size: .75rem;
 
         &::before {
-          content: "\25be\a0";
+          content: "\2795\a0";
           font-size: 1rem;
         }
 

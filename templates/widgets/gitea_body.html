@@ -16,7 +16,7 @@
         {{ latest_release.tag_name }}
         {% if latest_release.name and latest_release.name != latest_release.tag_name %} (<span class="release-name">{{ latest_release.name }}</span>){% endif %}
         <span class="release-date"></span>
-        {% if latest_release.author %} <span class="by">by</span> <span class="fg-highlight">{{ latest_release.author.login }}</span>{% endif %}
+        {% if latest_release.author %} <nobr><span class="by">by</span> <span class="fg-highlight">{{ latest_release.author.login }}</span></nobr>{% endif %}
     </div>
 {% endif %}
 

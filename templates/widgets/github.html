@@ -3,7 +3,9 @@
     <div class="repository item">
         <a class="html-link" target="_blank">{{ params.owner }}/{{ params.repository }}</a>
         {% if params.avatar %}<span class="avatar"><img class="avatar"/></span>{% endif %}
-        <span class="visibility"></span><span class="language"></span>
+        <div class="repo-details">
+            <span class="visibility"></span><span class="language"></span>
+        </div>
     </div>
     <div class="content loader"></div>
 </div>

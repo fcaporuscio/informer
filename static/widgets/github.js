@@ -8,7 +8,8 @@ InformerOnLoad(() => {
         ["visibility", ".visibility"],
         ["content", ".content"],
         ["link", ".html-link"],
-        ["repository_name", ".repository-name"]
+        ["repository_name", ".repository-name"],
+        "language"
       ]);
     }
 
@@ -56,6 +57,10 @@ InformerOnLoad(() => {
         if(published_at_str) {
           release_date.innerHTML = `<span class="fg-widget">released on</span> ${published_at_str}`;
         }
+      }
+
+      if(this?.language) {
+        this.language.innerText = (data?.language) ? data.language : "";
       }
     }
   }

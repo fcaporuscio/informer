@@ -308,7 +308,8 @@ html, body {
     text-wrap: nowrap;
 
     .widget-subheader {
-      font-style: italic;
+      /*font-style: italic;*/
+
     }
   }
 
@@ -337,11 +338,16 @@ html, body {
   &.widget-box, .widget-box {
     padding: 1rem .94rem;
     border: 1px solid {{ theme.widget_border_color}};
+    border-right-color: {{ theme.widget_border_color|hex_color_alpha(150) }};
+    border-bottom-color: {{ theme.widget_border_color|hex_color_alpha(100) }};
+    border-left-color: {{ theme.widget_border_color|hex_color_alpha(200) }};
+    /*border-width: 1px;*/
+
     background-color: {{ theme.widget_background_color|hex_color_alpha(150) }};
     background-image: linear-gradient(-80deg, {{ theme.widget_border_color|hex_color_alpha(70) }} 0, {{ theme.widget_background_color }} 40px, {{ theme.widget_background_color }} 100%);
     color: {{ theme.widget_color }};
     border-radius: 5px;
-    box-shadow: 0 2px 0 0 {{ theme.widget_border_color|hex_color_alpha(50) }};
+    box-shadow: 0 4px 4px 0 #0000001f;
     transition: max-height .5s ease-in-out;
     overflow-y: hidden;
 
@@ -553,6 +559,19 @@ html, body {
 
 
 @media screen and (max-width: 919px) {
+  #app {
+    margin: 0 0 3rem;
+    padding: 0;
+    width: 100vw;
+    max-width: 1600px;
+
+    #navbar {
+      padding: 0 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom-color: {{ theme.widget_border_color|hex_color_alpha(100) }};
+    }
+  }
+
   #page {
     flex-direction: column;
 
@@ -568,15 +587,22 @@ html, body {
 
     .widget {
       &.widget-box, .widget-box {
-        padding: .5rem .45rem;
-        /*border-radius: 0;*/
-        border-width: 1px 0 0 0;
+        padding: 1rem;
         background-color: transparent;
+        border-radius: 0;
+        border-width: 1px 0;
+
+        .widget-header {
+          padding: 0;
+        }
+        .widget-box {
+          padding: 0;
+        }
       }
 
       .widget-header {
-        padding: 0;
-        margin: 0 0 .25rem;
+        padding: 0 1rem;
+        margin: 0 0 .5rem;
       }
     }
   }
@@ -604,7 +630,7 @@ html, body {
     }
 
     .widget-box {
-      border-width: 1px 0 0;
+      /*border-width: 1px 0 0;*/
       border-radius: 0;
       box-shadow: none;
 
@@ -628,7 +654,7 @@ html, body {
   #navbar {
     a.nav-link {
       &:link, &:visited {
-        padding-top: 1rem;
+        padding-top: 1.5rem;
         padding-bottom: 1.5rem;
       }
     }

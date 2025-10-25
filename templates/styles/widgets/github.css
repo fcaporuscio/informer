@@ -30,8 +30,13 @@
 
     .avatar {
       float: left;
-      margin-right: 0.125rem;
+      margin-right: 0.16rem;
+      margin-top: 2px;
     }
+  }
+
+  .repo-details {
+    line-height: 1;
   }
 
   .last-update {
@@ -76,7 +81,7 @@
     }
 
     .release-name {
-      color: {{ theme.accent_color|hex_color_alpha(220) }};
+      color: {{ theme.success_color }};
     }
 
     .by {
@@ -97,10 +102,11 @@
     }
   }
 
-  .visibility {
-    display: block;
+  .visibility, .language {
     font-size: .75rem;
+  }
 
+  .visibility {
     &.private {
       content: "Private";
       color: {{ theme.failure_color }};
@@ -112,11 +118,20 @@
     }
   }
 
+  .language {
+    color: {{ theme.success_color }};
+
+    &::before {
+      content: "\a0/\a0";
+      color: {{ theme.widget_border_color }};
+    }
+  }
+
   img.avatar {
-    max-width: 30px;
+    max-width: 33px;
     border: 1px solid {{ theme.widget_border_color }};
     border-radius: 4px;
-    margin-top: 3px;
+    /*margin-top: 0;*/
   }
 
   .content.loader:empty {
@@ -127,6 +142,8 @@
 #page {
   .widget-github, .widget.github {
     a.html-link {
+      margin-top: 4px;
+
       &:link, &:visited {
         color: {{ theme.section_active_color }};
       }
@@ -138,7 +155,7 @@
 @media screen and (min-resolution: 2dppx) {
   .widget-github, .widget.github {
     img.avatar {
-      max-width: 36px;
+      max-width: 37px;
     }
   }
 }
