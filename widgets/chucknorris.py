@@ -41,7 +41,7 @@ class ChuckNorris(Widget):
     """Chuck Norris can roundhouse-kick fetched data in the face... with
     his fist."""
 
-    headers = { "User-Agent": self.user_agent }
+    headers = self.make_fetch_headers()
 
     # Retrieve the category list
     response = self.web_fetch("GET",

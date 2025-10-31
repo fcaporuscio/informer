@@ -2,10 +2,14 @@
 
 import pendulum
 
-from .widget import Widget
+from .widget import Widget, WidgetInitException
 
 
 __all__ = ["Date"]
+
+
+class InvalidDateException(Exception):
+  pass
 
 
 #
@@ -28,7 +32,10 @@ class Date(Widget):
 
   def init(self):
     """Initialize out widget according to the parameters supplied."""
-    self.params["offset_seconds"] = self._get_offset()
+    try:
+      self.params["offset_seconds"] = self._get_offset()
+    except InvalidDateException as e:
+      raise WidgetInitException(str(e)) from e
 
   def _get_offset(self):
     """Gets the current timezone offset (seconds, integer) between the
@@ -40,7 +47,7 @@ class Date(Widget):
     try:
       nowTZ = now.in_timezone(timezone)
     except pendulum.tz.exceptions.InvalidTimezone as e:
-      raise Exception(f"Invalid Timezone: '{str(e)}'")
+      raise InvalidDateException(f"Invalid Timezone: '{str(e)}'")
 
     return nowTZ.offset - now.offset
 

@@ -88,8 +88,8 @@ files) if needed -- based on whether or not your widget defined the
 Use it like this:
 ```python
 
-  headers = { "User-Agent": self.user_agent }
   url = "http://localhost:8001/personal-api/get-data/30"
+  headers = self.make_fetch_headers()
   response = self.web_fetch("GET", url, headers=headers)
   results = response.json()
   return results

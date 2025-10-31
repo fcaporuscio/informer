@@ -583,6 +583,15 @@ class Widget(WidgetBase):
            f"""Missing: templates/widgets/<b>{self._get_template_file()}</b>""" \
            f"""</div>"""
 
+  def make_fetch_headers(self, **kwargs):
+    """Returns headers to be used for fetching data."""
+    headers = {
+      "User-Agent": self.user_agent
+    }
+
+    headers.update(kwargs)
+    return headers
+
   def fetch_data(self) -> dict:
     """Fetch the data for this widget (this would be initiated by the
     JS, post-load). This should get overwritten if the widget has post

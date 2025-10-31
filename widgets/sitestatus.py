@@ -81,7 +81,7 @@ class SiteStatus(Widget):
 
       if isinstance(url, str) and url and isinstance(status_accept, list) and status_accept:
         try:
-          headers = { "User-Agent": self.user_agent }
+          headers = self.make_fetch_headers()
           # We request stream=True so that we don't actually download the
           # content of the page.
           response = self.web_fetch("GET", url,

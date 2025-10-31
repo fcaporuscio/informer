@@ -21,7 +21,7 @@ from templates import loader_env
 from widgets import WIDGETS_BY_TYPE, Widget, WidgetFinder
 
 
-__version__ = "1.0.8"
+__version__ = "1.0.9"
 
 
 CONFIG_FILENAME_DEFAULT = "informer.yml"
@@ -301,8 +301,7 @@ def get_stylesheet() -> str:
   """Returns our main stylesheet CSS. We include 'theme' in the template
   context so that we can use this data in the template."""
 
-  with app.test_client() as client:
-    return client.get("/bundle_informercss.informercss")
+  return bundler(["informercss"], "informercss")
 
 
 @app.route("/bundle_<bundle_files>.<bundle_type>", methods=["GET"])

@@ -27,7 +27,7 @@ class RonSwanson(Widget):
   def fetch_data(self):
     """Get a quote from Ron!"""
 
-    headers = headers = { "User-Agent": self.user_agent }
+    headers = self.make_fetch_headers()
     response = self.web_fetch("GET",
                               f"{self.URL}/{self.params['number']}",
                               headers=headers,

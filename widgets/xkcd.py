@@ -30,7 +30,7 @@ class xkcd(Widget):
     """The JS is requesting data (post-load). We need to prepare the
     data and return JSON."""
 
-    headers = { "User-Agent": self.user_agent }
+    headers = self.make_fetch_headers()
     response = self.web_fetch("GET", self.URL, headers=headers)
     if not response.ok:
       raise WidgetFetchDataException(f"Retrieving the xkcd url failed.")

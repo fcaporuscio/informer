@@ -62,7 +62,8 @@ class Config:
 
   def _sanitize(self, config: dict):
     """Ensures each page has a slug definition and that hidden pages
-    get removed. Modifies the config dictionary and returns it."""
+    get removed. Modifies the config dictionary and returns it. This
+    modifies the dictionary itself and returns it."""
 
     pages = []
 

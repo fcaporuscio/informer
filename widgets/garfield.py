@@ -43,11 +43,16 @@ class Garfield(Widget):
     is_random = self.params["random"]
     supplied_date = self.params["date"]
     exc = None
+    url = None
 
     if supplied_date:
       self.log_debug(f"Using supplied date '{supplied_date}'.")
       try:
-        date = pendulum.parse(supplied_date, tz="America/New_York")
+        try:
+          date = pendulum.parse(supplied_date, tz="America/New_York")
+        except Exception as e:
+          date = None
+          raise WidgetFetchDataException(f"Unable to parse the supplied date: '{supplied_date}'") from e
 
         earliest_date = self.get_earliest_date()
         latest_date = self.get_latest_date()
@@ -56,23 +61,12 @@ class Garfield(Widget):
           raise WidgetFetchDataException(f"Invalid Garfield date specified. The date must be between "
                                          f"{earliest_date.format('YYYY-MM-DD')} and "
                                          f"{latest_date.format('YYYY-MM-DD')}.")
-      except Exception as e:
-        if isinstance(e, WidgetFetchDataException):
-          exc = str(e)
-        else:
-          date = None
-          try:
-            raise WidgetFetchDataException(f"Unable to parse the supplied date: '{supplied_date}'")
-          except Exception as e:
-            exc = str(e)
+      except WidgetFetchDataException as e:
+        exc = str(e)
     else:
       date = None
 
-    if date is None:
-      try:
-        date = self.generate_random_date() if is_random else self.get_latest_date()
-      except Exception:
-        date = pendulum.now().start_of("day")
+    date = date or (self.generate_random_date() if is_random else self.get_latest_date())
 
     if exc is None:
       try:
@@ -86,12 +80,9 @@ class Garfield(Widget):
       "year": date.year,
       "month": date.month,
       "day": date.day,
+      "error": exc,
+      "url": url,
     }
-
-    if exc:
-      results["error"] = exc
-    else:
-      results["url"] = url
 
     return results
 
@@ -131,8 +122,9 @@ class Garfield(Widget):
     """Returns the latest date for which the Garfield comic is
     available."""
 
-    # We give a leeway of 4 hours... just because I don't know when
-    # they put the image up!
+    # We give a leeway of 4 hours since the new image may not be
+    # available immediately at 12am, and we don't know the timezone of
+    # the resource!
 
     return pendulum.now().subtract(hours=4).start_of("day")
 

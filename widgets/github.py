@@ -50,7 +50,7 @@ class GitHub(Widget):
 
     owner = self.params["owner"]
     repository = self.params["repository"]
-    headers = headers = { "User-Agent": self.user_agent }
+    headers = self.make_fetch_headers()
 
     url = f"{self.URL_BASE}/{owner}/{repository}"
     response = self.web_fetch("GET", url, headers=headers)
